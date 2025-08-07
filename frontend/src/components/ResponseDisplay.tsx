@@ -65,18 +65,22 @@ const ResponseDisplay: React.FC<ResponseDisplayProps> = ({
     }
   }, [onTTSComplete, cancelTyping]);
   
+  const fadeTimeoutRef = useRef<number | null>(null);
+  
   const startFadeTimer = useCallback(() => {
-    if (fadeTimeout) {
-      window.clearTimeout(fadeTimeout);
+    if (fadeTimeoutRef.current) {
+      window.clearTimeout(fadeTimeoutRef.current);
     }
     
     const timeout = window.setTimeout(() => {
       setShowResponse(false);
       setDisplayText('');
+      fadeTimeoutRef.current = null;
     }, FADE_DELAY);
     
+    fadeTimeoutRef.current = timeout;
     setFadeTimeout(timeout);
-  }, [fadeTimeout]);
+  }, []);
   
   useEffect(() => {
     // Only start typing if this is a new response
@@ -91,23 +95,18 @@ const ResponseDisplay: React.FC<ResponseDisplayProps> = ({
     if (!isTyping && displayText) {
       startFadeTimer();
     }
-    
-    return () => {
-      if (fadeTimeout) {
-        window.clearTimeout(fadeTimeout);
-      }
-    };
-  }, [isTyping, displayText, startFadeTimer, fadeTimeout]);
+  }, [isTyping, displayText, startFadeTimer]);
   
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       cancelTyping();
-      if (fadeTimeout) {
-        window.clearTimeout(fadeTimeout);
+      if (fadeTimeoutRef.current) {
+        window.clearTimeout(fadeTimeoutRef.current);
+        fadeTimeoutRef.current = null;
       }
     };
-  }, [cancelTyping, fadeTimeout]);
+  }, [cancelTyping]);
   
   return (
     <AnimatePresence>

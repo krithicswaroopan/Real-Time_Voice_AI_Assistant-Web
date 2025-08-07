@@ -161,6 +161,9 @@ class StreamingService:
             logger.info(f"WebSocket connection established: {connection_id} from {websocket.client.host}:{websocket.client.port}")
             logger.info(f"Total active connections: {len(self.websocket_connections)}")
             
+            # Log connection details for debugging
+            logger.debug(f"Active connection IDs: {list(self.websocket_connections.keys())}")
+            
             # Send connection confirmation
             await self.send_websocket_message(connection_id, {
                 "type": "connection_established",
@@ -220,11 +223,26 @@ class StreamingService:
         finally:
             # Clean up connection
             logger.info(f"Cleaning up WebSocket connection: {connection_id}")
-            if connection_id in self.websocket_connections:
-                del self.websocket_connections[connection_id]
+            
+            # Force cleanup of WebSocket connection
+            try:
+                if connection_id in self.websocket_connections:
+                    ws = self.websocket_connections[connection_id]
+                    if hasattr(ws, 'client_state') and ws.client_state.name != "DISCONNECTED":
+                        try:
+                            await ws.close(code=1000, reason="Connection cleanup")
+                        except Exception:
+                            pass  # Connection may already be closed
+                    del self.websocket_connections[connection_id]
+            except Exception as cleanup_error:
+                logger.error(f"Error during WebSocket cleanup: {cleanup_error}")
+            
+            # Clean up connection state
             if connection_id in self.active_connections:
                 del self.active_connections[connection_id]
+            
             logger.info(f"Remaining active connections: {len(self.websocket_connections)}")
+            logger.debug(f"Remaining connection IDs: {list(self.websocket_connections.keys())}")
     
     async def process_websocket_message(
         self,
@@ -260,6 +278,17 @@ class StreamingService:
     ):
         """Handle incoming audio chunk."""
         try:
+            # Validate connection exists and is active
+            if connection_id not in self.active_connections:
+                logger.warning(f"Received audio chunk for inactive connection: {connection_id}")
+                return
+            
+            # Check for connection ID mismatch (if client sends it)
+            client_connection_id = data.get("connection_id")
+            if client_connection_id and client_connection_id != connection_id:
+                logger.warning(f"Connection ID mismatch: server={connection_id}, client={client_connection_id}")
+                return
+            
             audio_data = data.get("audio_data")
             audio_format = data.get("format", "webm")  # Default to WebM from MediaRecorder
             
@@ -497,7 +526,32 @@ class StreamingService:
         connection_id: str,
         data: Dict[str, Any]
     ):
-        """Handle TTS request."""
+        """Handle TTS request with non-blocking processing."""
+        try:
+            # Send immediate acknowledgment to prevent timeout
+            await self.send_websocket_message(connection_id, {
+                "type": "tts_processing",
+                "success": True,
+                "message": "TTS processing started..."
+            })
+            
+            # Process TTS in background task with timeout
+            asyncio.create_task(self._process_tts_background(connection_id, data))
+            
+        except Exception as e:
+            logger.error(f"Error handling TTS request: {str(e)}")
+            await self.send_websocket_message(connection_id, {
+                "type": "tts_response",
+                "success": False,
+                "error": f"TTS request failed: {str(e)}"
+            })
+    
+    async def _process_tts_background(
+        self,
+        connection_id: str,
+        data: Dict[str, Any]
+    ):
+        """Process TTS in background with timeout."""
         try:
             from app.services.tts_service import tts_service
             from app.models.tts import TTSRequest
@@ -511,21 +565,41 @@ class StreamingService:
                 volume=data.get("volume", 0.0)
             )
             
-            response = await tts_service.synthesize_speech(request)
-            
-            # Send TTS response back
-            await self.send_websocket_message(connection_id, {
-                "type": "tts_response",
-                "success": response.success,
-                "audio_data": response.audio_data.hex() if response.audio_data else None,
-                "duration_ms": response.duration_ms,
-                "word_count": response.word_count,
-                "voice_used": response.voice_used,
-                "error": response.error
-            })
+            # Add timeout to TTS processing (10 seconds max)
+            try:
+                response = await asyncio.wait_for(
+                    tts_service.synthesize_speech(request),
+                    timeout=10.0
+                )
+                
+                # Send TTS response back
+                await self.send_websocket_message(connection_id, {
+                    "type": "tts_response",
+                    "success": response.success,
+                    "audio_data": response.audio_data.hex() if response.audio_data else None,
+                    "duration_ms": response.duration_ms,
+                    "word_count": response.word_count,
+                    "voice_used": response.voice_used,
+                    "error": response.error
+                })
+                
+            except asyncio.TimeoutError:
+                logger.warning(f"TTS timeout for connection {connection_id}, sending text-only response")
+                await self.send_websocket_message(connection_id, {
+                    "type": "tts_response",
+                    "success": False,
+                    "error": "TTS timeout - audio generation took too long",
+                    "fallback_text": data.get("text", ""),
+                    "timeout": True
+                })
             
         except Exception as e:
-            logger.error(f"Error handling TTS request: {str(e)}")
+            logger.error(f"Error processing TTS in background: {str(e)}")
+            await self.send_websocket_message(connection_id, {
+                "type": "tts_response",
+                "success": False,
+                "error": f"TTS processing failed: {str(e)}"
+            })
     
     async def handle_rating(
         self,
@@ -558,27 +632,29 @@ class StreamingService:
     ):
         """Send JSON message to WebSocket client."""
         try:
-            if connection_id in self.websocket_connections:
-                websocket = self.websocket_connections[connection_id]
+            if connection_id not in self.websocket_connections:
+                logger.warning(f"Attempted to send message to non-existent connection: {connection_id}")
+                return
                 
-                # Check if websocket is still connected
-                if websocket.client_state.name == "DISCONNECTED":
-                    logger.warning(f"Attempted to send message to disconnected WebSocket: {connection_id}")
-                    # Clean up disconnected connection
-                    if connection_id in self.websocket_connections:
-                        del self.websocket_connections[connection_id]
-                    if connection_id in self.active_connections:
-                        del self.active_connections[connection_id]
-                    return
-                
-                await websocket.send_text(json.dumps(data))
+            websocket = self.websocket_connections[connection_id]
+            
+            # Check if websocket is still connected
+            if websocket.client_state.name == "DISCONNECTED":
+                logger.warning(f"Attempted to send message to disconnected WebSocket: {connection_id}")
+                # Clean up disconnected connection
+                await self._cleanup_connection(connection_id)
+                return
+            
+            # Add connection ID to the message for client validation
+            data["server_connection_id"] = connection_id
+            
+            await websocket.send_text(json.dumps(data))
+            logger.debug(f"Sent message to {connection_id}: {data.get('type', 'unknown')}")
+            
         except Exception as e:
-            logger.error(f"Error sending WebSocket message: {str(e)}")
+            logger.error(f"Error sending WebSocket message to {connection_id}: {str(e)}")
             # Clean up problematic connection
-            if connection_id in self.websocket_connections:
-                del self.websocket_connections[connection_id]
-            if connection_id in self.active_connections:
-                del self.active_connections[connection_id]
+            await self._cleanup_connection(connection_id)
     
     async def send_audio_to_janus(
         self,
@@ -607,10 +683,7 @@ class StreamingService:
         
         # Remove disconnected clients
         for connection_id in disconnected:
-            if connection_id in self.websocket_connections:
-                del self.websocket_connections[connection_id]
-            if connection_id in self.active_connections:
-                del self.active_connections[connection_id]
+            await self._cleanup_connection(connection_id)
     
     def _start_silence_checker(self):
         """Start the background task for checking silence timeouts."""
@@ -645,6 +718,30 @@ class StreamingService:
             except Exception as e:
                 logger.error(f"Error in silence check loop: {str(e)}")
                 await asyncio.sleep(1.0)  # Wait longer on error
+
+
+    async def _cleanup_connection(self, connection_id: str):
+        """Clean up a specific connection."""
+        try:
+            if connection_id in self.websocket_connections:
+                del self.websocket_connections[connection_id]
+                logger.debug(f"Removed WebSocket connection: {connection_id}")
+            
+            if connection_id in self.active_connections:
+                del self.active_connections[connection_id]
+                logger.debug(f"Removed active connection state: {connection_id}")
+                
+        except Exception as e:
+            logger.error(f"Error cleaning up connection {connection_id}: {str(e)}")
+    
+    async def get_connection_stats(self) -> Dict[str, Any]:
+        """Get current connection statistics."""
+        return {
+            "total_websocket_connections": len(self.websocket_connections),
+            "total_active_connections": len(self.active_connections),
+            "websocket_connection_ids": list(self.websocket_connections.keys()),
+            "active_connection_ids": list(self.active_connections.keys()),
+        }
 
 
 # Global streaming service instance

@@ -120,11 +120,9 @@ async def get_active_connections():
         Connection statistics
     """
     try:
-        return {
-            "websocket_connections": len(streaming_service.websocket_connections),
-            "active_connections": len(streaming_service.active_connections),
-            "janus_url": streaming_service.janus_url
-        }
+        stats = await streaming_service.get_connection_stats()
+        stats["janus_url"] = streaming_service.janus_url
+        return stats
     except Exception as e:
         logger.error(f"Error getting connection info: {str(e)}")
         raise HTTPException(
