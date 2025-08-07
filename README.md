@@ -1,53 +1,53 @@
-# 🧠 Real-Time Conversational AI Assistant
+# Real-Time Conversational AI Assistant
 
 A modern, **fully voice-activated** conversational AI assistant web application with continuous listening, real-time VAD processing, and auto-fading responses. Built using WebRTC, open-source LLMs, and advanced audio processing.
 
-## ✨ Key Features
+## Key Features
 
-### 🎤 **Live Voice Interface** (NEW!)
-- **🔥 Continuous Listening**: Auto-starts on page load - no buttons required!
-- **🎯 Voice Activity Detection**: Real-time VAD with `webrtcvad` processing
-- **⚡ Live Audio Streaming**: WebSocket-based continuous audio pipeline
-- **🎙️ Smart Voice Processing**: Noise suppression, auto-gain, echo cancellation
-- **📱 Button-Free Experience**: Pure voice interaction - just speak naturally!
+### **Live Voice Interface** (NEW!)
+- **Continuous Listening**: Auto-starts on page load - no buttons required!
+- **Voice Activity Detection**: Real-time VAD with `webrtcvad` processing
+- **Live Audio Streaming**: WebSocket-based continuous audio pipeline
+- **Smart Voice Processing**: Noise suppression, auto-gain, echo cancellation
+- **Button-Free Experience**: Pure voice interaction - just speak naturally!
 
-### 🤖 **AI Response System**
-- **✨ Auto-Generated Responses**: Instant AI responses to voice input
-- **🗣️ Text-to-Speech**: Automatic speech synthesis and playback
-- **⏰ 20-Second Auto-Fade**: Responses fade away after TTS + 20 seconds
-- **🔄 Continuous Loop**: Always ready for the next voice interaction
+### **AI Response System**
+- **Auto-Generated Responses**: Instant AI responses to voice input
+- **Text-to-Speech**: Automatic speech synthesis and playback
+- **20-Second Auto-Fade**: Responses fade away after TTS + 20 seconds
+- **Continuous Loop**: Always ready for the next voice interaction
 
-### 🎨 **Modern Voice UI**
-- **🌟 Live Audio Visualizer**: Real-time voice activity display
-- **📊 VAD Status Indicators**: Visual feedback for listening state
-- **🎭 Smooth Animations**: Framer Motion powered transitions
-- **🌙 Voice-First Design**: Minimal, distraction-free interface
+### **Modern Voice UI**
+- **Live Audio Visualizer**: Real-time voice activity display
+- **VAD Status Indicators**: Visual feedback for listening state
+- **Smooth Animations**: Framer Motion powered transitions
+- **Voice-First Design**: Minimal, distraction-free interface
 
-### 🔧 **Advanced Audio Processing**
-- **🎯 Real-time VAD**: `webrtcvad` with configurable sensitivity
-- **🔊 Audio Normalization**: Automatic level adjustment
-- **🎚️ Noise Suppression**: Advanced filtering algorithms
-- **📡 WebRTC Streaming**: Low-latency audio transmission
+### **Advanced Audio Processing**
+- **Real-time VAD**: `webrtcvad` with configurable sensitivity
+- **Audio Normalization**: Automatic level adjustment
+- **Noise Suppression**: Advanced filtering algorithms
+- **WebRTC Streaming**: Low-latency audio transmission
 
-### 🌐 **Real-time Communication**
-- **⚡ WebSocket Streaming**: Continuous audio chunk processing
-- **🎯 VAD-Triggered Transcription**: Process speech only when detected
-- **🔄 Auto-Reconnection**: Robust connection management
-- **📊 Live Status Monitoring**: Real-time connection health
+### **Real-time Communication**
+- **WebSocket Streaming**: Continuous audio chunk processing
+- **VAD-Triggered Transcription**: Process speech only when detected
+- **Auto-Reconnection**: Robust connection management
+- **Live Status Monitoring**: Real-time connection health
 
-### 🤖 **AI Models & Processing**
-- **🦙 Open-Source LLMs**: Access to Llama, Mistral, CodeLlama via OpenRouter
-- **🎧 Speech Recognition**: OpenAI Whisper integration
-- **🗣️ Text-to-Speech**: Coqui TTS with multiple voices
-- **💬 Streaming Responses**: Real-time text generation
+### **AI Models & Processing**
+- **Open-Source LLMs**: Access to Llama, Mistral, CodeLlama via OpenRouter
+- **Speech Recognition**: OpenAI Whisper integration
+- **Text-to-Speech**: Coqui TTS with multiple voices
+- **Streaming Responses**: Real-time text generation
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    LIVE VOICE INTERFACE                         │
 ├─────────────────────────────────────────────────────────────────┤
-│  🎤 Auto-Start → 🎯 VAD → 📝 ASR → 🤖 LLM → 🗣️ TTS → ⏰ Fade  │
+│  Audio Input → VAD → ASR → LLM → TTS → Audio Output  │
 └─────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
@@ -72,7 +72,7 @@ A modern, **fully voice-activated** conversational AI assistant web application 
                                      └─────────────────┘
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -139,7 +139,7 @@ docker-compose down
 - **Backend API**: http://localhost:8000
 - **API Documentation**: http://localhost:8000/docs
 
-## 🎤 How to Use the Voice Interface
+## How to Use the Voice Interface
 
 ### Getting Started
 1. **Open the app** → http://localhost:3000
@@ -148,14 +148,14 @@ docker-compose down
 
 ### Voice Interaction Flow
 ```
-🎤 Speak → 🎯 VAD Detects → 📝 Transcribes → 🤖 AI Responds → 🗣️ TTS Plays → ⏰ Fades (20s)
+Speak → VAD Detects → Transcribes → AI Responds → TTS Plays → Fades (20s)
 ```
 
 ### Visual Indicators
-- **🟢 Green Pulse**: Listening and ready
-- **🔴 Red Ripple**: Voice activity detected
-- **🟡 Yellow**: Processing your speech
-- **🔵 Blue**: AI generating response
+- **Green Pulse**: Listening and ready
+- **Red Ripple**: Voice activity detected
+- **Yellow**: Processing your speech
+- **Blue**: AI generating response
 
 ### Tips for Best Experience
 - **Speak clearly** and at normal volume
@@ -163,7 +163,7 @@ docker-compose down
 - **Pause briefly** between sentences
 - **Stay within 3 feet** of microphone for best VAD detection
 
-## 🛠️ Development Setup
+## Development Setup
 
 ### Backend Development
 
@@ -196,7 +196,7 @@ npm start
 npm run build
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 ### Live Audio Endpoints
 
@@ -227,7 +227,7 @@ npm run build
 - `POST /api/v1/tts/synthesize` - Synthesize speech
 - `GET /api/v1/tts/voices` - Available voices
 
-## 🎛️ Configuration
+## Configuration
 
 ### Voice Activity Detection Settings
 
@@ -255,7 +255,7 @@ npm run build
 | `TYPING_ANIMATION_SPEED` | Typing effect speed (ms) | `50` |
 | `AUTO_PLAY_TTS` | Auto-play TTS responses | `true` |
 
-## 🔧 Customization
+## Customization
 
 ### Adjusting VAD Sensitivity
 
@@ -281,7 +281,7 @@ class AudioService:
         pass
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Production Configuration
 
@@ -302,7 +302,7 @@ docker-compose --profile production up -d
 - **Audio Quality**: Set `SAMPLE_RATE` to 16000 for optimal VAD performance
 - **Memory Usage**: Configure audio buffer sizes based on usage patterns
 
-## 🧪 Testing the Voice Interface
+## Testing the Voice Interface
 
 ### Voice Testing Commands
 
@@ -324,7 +324,7 @@ curl -X POST http://localhost:8000/api/v1/audio/test-pipeline \
 3. **Test WebSocket connection**
 4. **Verify VAD detection**
 
-## 🤝 Contributing
+## Contributing
 
 ### Voice Interface Development
 
@@ -340,11 +340,11 @@ curl -X POST http://localhost:8000/api/v1/audio/test-pipeline \
 - Test auto-fade timing and TTS integration
 - Validate WebSocket connection stability
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **WebRTC VAD** for real-time voice activity detection
 - **OpenRouter** for providing access to open-source LLMs
@@ -353,7 +353,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Material-UI** for the beautiful component library
 - **FastAPI** for the high-performance backend framework
 
-## 📞 Support
+## Support
 
 For voice interface issues:
 - **Audio Problems**: Check microphone permissions and VAD settings
@@ -366,4 +366,4 @@ For voice interface issues:
 
 ---
 
-**🎤 Voice-First AI Assistant - Just Speak and Listen!** ❤️
+**Voice-First AI Assistant - Just Speak and Listen!**
