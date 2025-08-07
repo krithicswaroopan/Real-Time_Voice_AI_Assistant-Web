@@ -163,7 +163,8 @@ export const useContinuousAudio = (): UseContinuousAudioReturn => {
             // Send audio chunk to backend for VAD processing
             websocketRef.current.send(JSON.stringify({
               type: 'audio_chunk',
-              audio_data: Array.from(audioData)
+              audio_data: Array.from(audioData),
+              format: 'webm'
             }));
           } catch (err) {
             console.error('Error processing audio chunk:', err);

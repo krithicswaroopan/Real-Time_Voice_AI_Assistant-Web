@@ -18,10 +18,14 @@ from app.routers import (
 from app.services.asr_service import asr_service
 from app.services.llm_service import llm_service
 
-# Configure logging
+# Configure structured logging
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper()),
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler("logs/app.log", mode="a")
+    ]
 )
 
 logger = logging.getLogger(__name__)

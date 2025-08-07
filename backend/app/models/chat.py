@@ -30,6 +30,8 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     """Response model for chat interactions."""
     
+    model_config = {"protected_namespaces": ()}
+    
     success: bool = Field(..., description="Whether the chat request was successful")
     message: str = Field(..., description="Assistant response text")
     conversation_id: str = Field(..., description="Conversation ID")

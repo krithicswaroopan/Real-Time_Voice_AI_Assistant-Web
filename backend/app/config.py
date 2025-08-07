@@ -43,7 +43,7 @@ class Settings(BaseSettings):
             return [origin.strip() for origin in v.split(",")]
         return v
     
-    # OpenAI API Configuration
+    # OpenAI API Configuration (for Whisper)
     openai_api_key: str = Field(..., env="OPENAI_API_KEY")
     
     # OpenRouter API Configuration (for LLM)
@@ -103,6 +103,15 @@ class Settings(BaseSettings):
     # Security Configuration
     secret_key: str = Field(..., env="SECRET_KEY")
     algorithm: str = Field(default="HS256", env="ALGORITHM")
+
+    @field_validator("secret_key")
+    @classmethod
+    def validate_secret_key(cls, v):
+        if len(v) < 32:
+            raise ValueError("SECRET_KEY must be at least 32 characters long")
+        if v in ["ai_voice_webapp", "your_secret_key_here"]:
+            raise ValueError("SECRET_KEY must be changed from default value")
+        return v
     access_token_expire_minutes: int = Field(
         default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES"
     )

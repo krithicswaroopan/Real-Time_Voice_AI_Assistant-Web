@@ -1,5 +1,25 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
+// Simple linear interpolation resampling
+const resampleAudio = (input: Float32Array, inputSampleRate: number, outputSampleRate: number): Float32Array => {
+  if (inputSampleRate === outputSampleRate) return input;
+  
+  const ratio = inputSampleRate / outputSampleRate;
+  const outputLength = Math.floor(input.length / ratio);
+  const output = new Float32Array(outputLength);
+  
+  for (let i = 0; i < outputLength; i++) {
+    const index = i * ratio;
+    const indexFloor = Math.floor(index);
+    const indexCeil = Math.min(indexFloor + 1, input.length - 1);
+    const fraction = index - indexFloor;
+    
+    output[i] = input[indexFloor] * (1 - fraction) + input[indexCeil] * fraction;
+  }
+  
+  return output;
+};
+
 export type AudioState = 'idle' | 'listening' | 'processing' | 'speaking';
 
 interface UseAudioManagerReturn {
@@ -262,12 +282,10 @@ export const useAudioManager = (): UseAudioManagerReturn => {
       setError(null);
       isPausedRef.current = false;
       
-      // Request microphone access
+      // Request microphone access without forcing sample rate
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           channelCount: 1,
-          sampleRate: SAMPLE_RATE,
-          sampleSize: 16,
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
@@ -276,9 +294,16 @@ export const useAudioManager = (): UseAudioManagerReturn => {
       
       streamRef.current = stream;
       
-      // Initialize audio context for PCM extraction
-      const audioContext = new AudioContext({ sampleRate: SAMPLE_RATE });
+      // Initialize audio context with default sample rate (let browser decide)
+      const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
+      
+      // Get the actual sample rates
+      const audioTrack = stream.getAudioTracks()[0];
+      const settings = audioTrack.getSettings();
+      const streamSampleRate = settings.sampleRate || audioContext.sampleRate;
+      console.log('Stream sample rate:', streamSampleRate);
+      console.log('AudioContext sample rate:', audioContext.sampleRate);
       
       // Resume audio context if suspended (required by Chrome)
       if (audioContext.state === 'suspended') {
@@ -287,39 +312,50 @@ export const useAudioManager = (): UseAudioManagerReturn => {
       
       console.log('Audio context state:', audioContext.state);
       
-      const source = audioContext.createMediaStreamSource(stream);
-      const processor = audioContext.createScriptProcessor(4096, 1, 1);
-      
-      processor.onaudioprocess = (event) => {
-        // Use ref instead of state to avoid closure issues
-        if (!isPausedRef.current && websocketRef.current?.readyState === WebSocket.OPEN) {
-          const inputBuffer = event.inputBuffer;
-          const inputData = inputBuffer.getChannelData(0);
-          
-          console.log(`Processing audio: ${inputData.length} samples`);
-          
-          // Convert float32 to int16 PCM
-          const int16Array = new Int16Array(inputData.length);
-          for (let i = 0; i < inputData.length; i++) {
-            const sample = Math.max(-1, Math.min(1, inputData[i]));
-            int16Array[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
-          }
-          
-          // Send PCM data
-          try {
+      // Use Web Audio API with PCM conversion instead of MediaRecorder
+      try {
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = audioContext.createScriptProcessor(2048, 1, 1);
+        
+        processor.onaudioprocess = (event) => {
+          if (!isPausedRef.current && websocketRef.current?.readyState === WebSocket.OPEN) {
+            const inputData = event.inputBuffer.getChannelData(0);
+            
+            // Resample to 16kHz if needed
+            const ratio = audioContext.sampleRate / SAMPLE_RATE;
+            const targetLength = Math.floor(inputData.length / ratio);
+            const resampled = new Float32Array(targetLength);
+            
+            for (let i = 0; i < targetLength; i++) {
+              const sourceIndex = Math.floor(i * ratio);
+              resampled[i] = inputData[sourceIndex] || 0;
+            }
+            
+            // Convert to 16-bit PCM
+            const int16Array = new Int16Array(resampled.length);
+            for (let i = 0; i < resampled.length; i++) {
+              const sample = Math.max(-1, Math.min(1, resampled[i]));
+              int16Array[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+            }
+            
+            // Send PCM data
             websocketRef.current.send(JSON.stringify({
               type: 'audio_chunk',
-              audio_data: Array.from(new Uint8Array(int16Array.buffer))
+              audio_data: Array.from(new Uint8Array(int16Array.buffer)),
+              format: 'pcm',
+              sample_rate: SAMPLE_RATE
             }));
-            console.log(`Sent audio chunk: ${int16Array.buffer.byteLength} bytes`);
-          } catch (error) {
-            console.error('Error sending audio chunk:', error);
           }
-        }
-      };
-      
-      source.connect(processor);
-      processor.connect(audioContext.destination);
+        };
+        
+        // Connect audio nodes (but don't route to speakers)
+        source.connect(processor);
+        console.log('Audio processing initialized with PCM conversion');
+        
+      } catch (audioError) {
+        console.error('Audio processing setup failed:', audioError);
+        setError('Failed to setup audio processing');
+      }
       
       // Initialize WebSocket
       await initializeWebSocket();

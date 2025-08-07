@@ -5,7 +5,15 @@ import numpy as np
 import webrtcvad
 import io
 import wave
+import tempfile
 from typing import Optional, Tuple, List
+try:
+    from pydub import AudioSegment
+    from pydub.utils import which
+    PYDUB_AVAILABLE = True
+except ImportError:
+    PYDUB_AVAILABLE = False
+    logger.warning("pydub not available - WebM conversion disabled")
 from app.config import settings
 
 logger = logging.getLogger(__name__)
@@ -39,6 +47,64 @@ class AudioService:
         except Exception as e:
             logger.error(f"Failed to initialize VAD: {str(e)}")
             self.vad = None
+
+    def convert_webm_to_pcm(
+        self,
+        webm_data: bytes,
+        target_sample_rate: Optional[int] = None
+    ) -> Tuple[bytes, bool]:
+        """
+        Convert WebM audio data to PCM format.
+        
+        Args:
+            webm_data: Raw WebM audio data from MediaRecorder
+            target_sample_rate: Target sample rate (defaults to configured rate)
+            
+        Returns:
+            Tuple of (pcm_data, success)
+        """
+        try:
+            if not PYDUB_AVAILABLE:
+                logger.error("pydub not available for WebM conversion")
+                return b'', False
+            
+            target_sample_rate = target_sample_rate or self.sample_rate
+            
+            # Create a temporary file for WebM data
+            with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as temp_file:
+                temp_file.write(webm_data)
+                temp_file.flush()
+                
+                try:
+                    # Load WebM audio using pydub
+                    audio = AudioSegment.from_file(temp_file.name, format="webm")
+                    
+                    # Convert to mono and target sample rate
+                    audio = audio.set_channels(1).set_frame_rate(target_sample_rate)
+                    
+                    # Convert to 16-bit samples
+                    audio = audio.set_sample_width(2)
+                    
+                    # Get raw PCM data
+                    pcm_data = audio.raw_data
+                    
+                    logger.debug(f"Converted WebM ({len(webm_data)} bytes) to PCM ({len(pcm_data)} bytes)")
+                    return pcm_data, True
+                    
+                except Exception as e:
+                    logger.error(f"Error converting WebM to PCM: {str(e)}")
+                    return b'', False
+                finally:
+                    # Clean up temporary file
+                    try:
+                        import os
+                        os.unlink(temp_file.name)
+                    except:
+                        pass
+                        
+        except Exception as e:
+            logger.error(f"WebM to PCM conversion failed: {str(e)}")
+            return b'', False
 
     def convert_pcm_to_wav(
         self, 

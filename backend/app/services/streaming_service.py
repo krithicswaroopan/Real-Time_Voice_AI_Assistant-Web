@@ -261,6 +261,8 @@ class StreamingService:
         """Handle incoming audio chunk."""
         try:
             audio_data = data.get("audio_data")
+            audio_format = data.get("format", "webm")  # Default to WebM from MediaRecorder
+            
             if not audio_data:
                 return
             
@@ -270,11 +272,22 @@ class StreamingService:
             else:
                 audio_bytes = audio_data
             
-            # Process PCM audio with VAD and noise suppression
             from app.services.audio_service import audio_service
-            processed_audio, has_speech = audio_service.process_audio_chunk(audio_bytes)
             
-            logger.debug(f"Received PCM audio chunk: {len(audio_bytes)} bytes from {connection_id}, has_speech: {has_speech}")
+            # Handle different audio formats
+            if audio_format.lower() == "webm":
+                # Convert WebM to PCM
+                pcm_data, conversion_success = audio_service.convert_webm_to_pcm(audio_bytes)
+                if not conversion_success or not pcm_data:
+                    logger.warning(f"Failed to convert WebM audio from {connection_id} - FFmpeg not available. Install FFmpeg for WebM support.")
+                    # Skip this chunk but don't crash
+                    return
+                processed_audio, has_speech = audio_service.process_audio_chunk(pcm_data)
+                logger.debug(f"Converted WebM audio chunk: {len(audio_bytes)} → {len(pcm_data)} bytes PCM from {connection_id}, has_speech: {has_speech}")
+            else:
+                # Handle PCM format
+                processed_audio, has_speech = audio_service.process_audio_chunk(audio_bytes)
+                logger.debug(f"Received {audio_format.upper()} audio chunk: {len(audio_bytes)} bytes from {connection_id}, has_speech: {has_speech}")
             
             # Debug logging for VAD results (reduced verbosity)
             if has_speech:
