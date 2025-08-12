@@ -16953,3 +16953,599 @@ httpx.ReadTimeout
 2025-08-07 16:13:47,202 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
 2025-08-07 16:13:47,203 - app.main - INFO - main.py:130 - Service connections closed successfully
 2025-08-07 16:13:47,203 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-07 16:33:56,791 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-07 16:33:56,791 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-07 16:33:56,792 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-07 16:34:26,286 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:50201
+2025-08-07 16:34:26,286 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:34:26,287 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:34:26,287 - app.services.streaming_service - INFO - streaming_service.py:161 - WebSocket connection established: 9db24a1a-ab98-47cd-b50c-82ab73efc15b from 127.0.0.1:50201
+2025-08-07 16:34:26,289 - app.services.streaming_service - INFO - streaming_service.py:162 - Total active connections: 1
+2025-08-07 16:34:35,784 - app.services.streaming_service - INFO - streaming_service.py:723 - Background silence timeout detected for 9db24a1a-ab98-47cd-b50c-82ab73efc15b
+2025-08-07 16:34:35,784 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 3.380s of audio for transcription from 9db24a1a-ab98-47cd-b50c-82ab73efc15b
+2025-08-07 16:34:35,784 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:34:38,203 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:35:10,302 - app.services.streaming_service - INFO - streaming_service.py:216 - WebSocket client going away: 9db24a1a-ab98-47cd-b50c-82ab73efc15b
+2025-08-07 16:35:10,302 - app.services.streaming_service - INFO - streaming_service.py:225 - Cleaning up WebSocket connection: 9db24a1a-ab98-47cd-b50c-82ab73efc15b
+2025-08-07 16:35:10,303 - app.services.streaming_service - INFO - streaming_service.py:244 - Remaining active connections: 0
+2025-08-07 16:35:10,303 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:42:14,987 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-07 16:42:14,988 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-07 16:42:14,988 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-07 16:42:32,673 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-07 16:42:32,673 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-07 16:42:32,673 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-07 16:42:32,674 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-07 16:42:32,674 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-07 16:42:32,674 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-07 16:42:32,674 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-07 16:42:32,675 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:42:32,675 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-07 16:42:32,675 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-07 16:42:32,675 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-07 16:42:54,182 - app.main - INFO - main.py:78 - Request: GET http://localhost:8000/main.991734e03fdeae8c763c.hot-update.json
+2025-08-07 16:42:54,184 - app.main - INFO - main.py:84 - Response: 404 - 0.002s
+2025-08-07 16:47:41,380 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51322
+2025-08-07 16:47:41,381 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:47:41,383 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:47:41,383 - app.services.streaming_service - INFO - streaming_service.py:161 - WebSocket connection established: 27226da0-cdf7-4d66-8998-7e69b6878ef5 from 127.0.0.1:51322
+2025-08-07 16:47:41,384 - app.services.streaming_service - INFO - streaming_service.py:162 - Total active connections: 1
+2025-08-07 16:47:51,342 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:47:51,344 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 1.940s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:47:51,345 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:47:52,678 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:47:52,691 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:47:54,103 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:48:03,882 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:03,882 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 5.140s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:03,882 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:48:04,992 - app.services.streaming_service - WARNING - streaming_service.py:595 - TTS timeout for connection 27226da0-cdf7-4d66-8998-7e69b6878ef5, sending text-only response
+2025-08-07 16:48:05,813 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:48:05,838 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:48:07,018 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:48:07,422 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:07,423 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 0.180s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:07,423 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:48:09,909 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:48:11,436 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:14,681 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:16,603 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:27,282 - app.services.streaming_service - INFO - streaming_service.py:723 - Background silence timeout detected for 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:27,282 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 0.440s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:27,283 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:48:28,744 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:48:33,835 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:33,835 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 1.360s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:33,836 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:48:36,484 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:48:39,551 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:45,872 - app.services.streaming_service - INFO - streaming_service.py:363 - Silence timeout reached for 27226da0-cdf7-4d66-8998-7e69b6878ef5, triggering transcription
+2025-08-07 16:48:45,873 - app.services.streaming_service - INFO - streaming_service.py:426 - Processing 2.640s of audio for transcription from 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:48:45,873 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:48:47,494 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:48:47,511 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:48:49,035 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:49:31,365 - app.services.streaming_service - ERROR - streaming_service.py:663 - Error sending WebSocket message to 27226da0-cdf7-4d66-8998-7e69b6878ef5: sent 1011 (internal error) keepalive ping timeout; no close frame received
+2025-08-07 16:49:31,365 - app.services.streaming_service - ERROR - streaming_service.py:218 - WebSocket receive error (unknown): '27226da0-cdf7-4d66-8998-7e69b6878ef5'
+2025-08-07 16:49:31,367 - app.services.streaming_service - INFO - streaming_service.py:225 - Cleaning up WebSocket connection: 27226da0-cdf7-4d66-8998-7e69b6878ef5
+2025-08-07 16:49:31,367 - app.services.streaming_service - INFO - streaming_service.py:244 - Remaining active connections: 0
+2025-08-07 16:49:31,367 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:51:47,878 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51552
+2025-08-07 16:51:47,878 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:51:47,880 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:51:47,881 - app.services.streaming_service - INFO - streaming_service.py:161 - WebSocket connection established: 23487c5c-97a1-49c3-8fb5-39705537f980 from 127.0.0.1:51552
+2025-08-07 16:51:47,881 - app.services.streaming_service - INFO - streaming_service.py:162 - Total active connections: 1
+2025-08-07 16:51:47,938 - app.services.streaming_service - INFO - streaming_service.py:214 - WebSocket service restart detected: 23487c5c-97a1-49c3-8fb5-39705537f980
+2025-08-07 16:51:47,938 - app.services.streaming_service - INFO - streaming_service.py:225 - Cleaning up WebSocket connection: 23487c5c-97a1-49c3-8fb5-39705537f980
+2025-08-07 16:51:47,938 - app.services.streaming_service - INFO - streaming_service.py:244 - Remaining active connections: 0
+2025-08-07 16:51:47,939 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:51:48,040 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-07 16:51:48,041 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-07 16:51:48,041 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-07 16:52:00,734 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-07 16:52:00,734 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-07 16:52:00,734 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-07 16:52:00,734 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-07 16:52:00,734 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-07 16:52:00,735 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-07 16:52:00,737 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-07 16:52:00,741 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-07 16:52:00,741 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-07 16:52:12,318 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-07 16:52:12,318 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-07 16:52:12,318 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-07 16:52:12,318 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-07 16:52:12,318 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-07 16:52:12,319 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-07 16:52:12,319 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-07 16:52:12,320 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:52:12,320 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-07 16:52:12,320 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-07 16:52:12,320 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-07 16:52:12,321 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51579
+2025-08-07 16:52:12,322 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:52:12,322 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:52:12,322 - app.services.streaming_service - INFO - streaming_service.py:164 - WebSocket connection established: a4a029c0-f3cb-45b4-80a3-621476ef03c3 from 127.0.0.1:51579
+2025-08-07 16:52:12,322 - app.services.streaming_service - INFO - streaming_service.py:165 - Total active connections: 1
+2025-08-07 16:52:21,942 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for a4a029c0-f3cb-45b4-80a3-621476ef03c3, triggering transcription
+2025-08-07 16:52:21,943 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 7.020s of audio for transcription from a4a029c0-f3cb-45b4-80a3-621476ef03c3
+2025-08-07 16:52:21,944 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:52:24,393 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:52:24,395 - app.services.streaming_service - ERROR - streaming_service.py:680 - Error sending WebSocket message to a4a029c0-f3cb-45b4-80a3-621476ef03c3: sent 1012 (service restart); no close frame received
+2025-08-07 16:52:24,396 - app.services.streaming_service - ERROR - streaming_service.py:226 - WebSocket receive error (unknown): 'a4a029c0-f3cb-45b4-80a3-621476ef03c3'
+2025-08-07 16:52:24,396 - app.services.streaming_service - INFO - streaming_service.py:233 - Cleaning up WebSocket connection: a4a029c0-f3cb-45b4-80a3-621476ef03c3
+2025-08-07 16:52:24,396 - app.services.streaming_service - INFO - streaming_service.py:252 - Remaining active connections: 0
+2025-08-07 16:52:24,397 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:52:24,499 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-07 16:52:24,500 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-07 16:52:24,500 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-07 16:52:36,582 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-07 16:52:36,582 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-07 16:52:36,582 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-07 16:52:36,582 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-07 16:52:36,582 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-07 16:52:36,583 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-07 16:52:36,583 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-07 16:52:36,583 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:52:36,583 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-07 16:52:36,584 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-07 16:52:36,584 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-07 16:53:01,256 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51688
+2025-08-07 16:53:01,256 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:53:01,257 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:53:01,257 - app.services.streaming_service - INFO - streaming_service.py:164 - WebSocket connection established: 5d9bcc5f-99da-43f7-b6a0-a02dd5a0d212 from 127.0.0.1:51688
+2025-08-07 16:53:01,257 - app.services.streaming_service - INFO - streaming_service.py:165 - Total active connections: 1
+2025-08-07 16:53:04,136 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 5d9bcc5f-99da-43f7-b6a0-a02dd5a0d212, triggering transcription
+2025-08-07 16:53:28,166 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 5d9bcc5f-99da-43f7-b6a0-a02dd5a0d212, triggering transcription
+2025-08-07 16:53:28,168 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 7.700s of audio for transcription from 5d9bcc5f-99da-43f7-b6a0-a02dd5a0d212
+2025-08-07 16:53:28,168 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:53:30,840 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51758
+2025-08-07 16:53:30,840 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:53:30,841 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:53:30,841 - app.services.streaming_service - INFO - streaming_service.py:164 - WebSocket connection established: dc7ee71e-8a3c-42ae-ab05-fa8f93dbde5e from 127.0.0.1:51758
+2025-08-07 16:53:30,841 - app.services.streaming_service - INFO - streaming_service.py:165 - Total active connections: 2
+2025-08-07 16:53:30,857 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:53:30,880 - app.services.streaming_service - ERROR - streaming_service.py:226 - WebSocket receive error (1000): 1000
+2025-08-07 16:53:30,880 - app.services.streaming_service - INFO - streaming_service.py:233 - Cleaning up WebSocket connection: 5d9bcc5f-99da-43f7-b6a0-a02dd5a0d212
+2025-08-07 16:53:30,880 - app.services.streaming_service - INFO - streaming_service.py:252 - Remaining active connections: 1
+2025-08-07 16:53:30,881 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:53:32,577 - app.services.streaming_service - INFO - streaming_service.py:749 - Background silence timeout detected for dc7ee71e-8a3c-42ae-ab05-fa8f93dbde5e
+2025-08-07 16:53:43,137 - app.services.streaming_service - ERROR - streaming_service.py:226 - WebSocket receive error (1000): 1000
+2025-08-07 16:53:43,137 - app.services.streaming_service - INFO - streaming_service.py:233 - Cleaning up WebSocket connection: dc7ee71e-8a3c-42ae-ab05-fa8f93dbde5e
+2025-08-07 16:53:43,138 - app.services.streaming_service - INFO - streaming_service.py:252 - Remaining active connections: 0
+2025-08-07 16:53:43,138 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:53:43,675 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51782
+2025-08-07 16:53:43,676 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:53:43,676 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:53:43,678 - app.services.streaming_service - INFO - streaming_service.py:164 - WebSocket connection established: 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa from 127.0.0.1:51782
+2025-08-07 16:53:43,678 - app.services.streaming_service - INFO - streaming_service.py:165 - Total active connections: 1
+2025-08-07 16:53:45,747 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, triggering transcription
+2025-08-07 16:53:45,749 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.240s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:53:45,751 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:53:46,978 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:53:46,990 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:53:48,292 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:53:49,203 - app.services.tts_service - INFO - tts_service.py:60 - Starting TTS synthesis for 184 characters
+2025-08-07 16:53:59,043 - app.services.tts_service - INFO - tts_service.py:69 - TTS synthesis completed in 9.84 seconds
+2025-08-07 16:53:59,052 - app.services.tts_service - INFO - tts_service.py:76 - Total TTS processing time: 9.85 seconds
+2025-08-07 16:54:01,572 - app.services.streaming_service - INFO - streaming_service.py:397 - Max buffer duration reached for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, triggering transcription
+2025-08-07 16:54:01,573 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 10.000s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:01,573 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:04,040 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:15,105 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, triggering transcription
+2025-08-07 16:54:15,105 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 8.520s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:15,106 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:17,523 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:17,540 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:54:18,474 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:54:19,190 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, triggering transcription
+2025-08-07 16:54:19,191 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.720s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:19,191 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:20,589 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:20,603 - app.services.tts_service - INFO - tts_service.py:60 - Starting TTS synthesis for 385 characters
+2025-08-07 16:54:26,704 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, triggering transcription
+2025-08-07 16:54:26,705 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.520s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:26,706 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:28,614 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:34,590 - app.services.streaming_service - INFO - streaming_service.py:749 - Background silence timeout detected for 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:34,590 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 1.440s of audio for transcription from 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:34,593 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:36,362 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:39,186 - app.services.streaming_service - INFO - streaming_service.py:224 - WebSocket client going away: 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:39,186 - app.services.streaming_service - INFO - streaming_service.py:233 - Cleaning up WebSocket connection: 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:39,187 - app.services.streaming_service - INFO - streaming_service.py:252 - Remaining active connections: 0
+2025-08-07 16:54:39,187 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:54:40,494 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:51826
+2025-08-07 16:54:40,495 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-07 16:54:40,497 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-07 16:54:40,497 - app.services.streaming_service - INFO - streaming_service.py:164 - WebSocket connection established: 48d88dd4-fa96-4b42-b84c-13009539fe17 from 127.0.0.1:51826
+2025-08-07 16:54:40,498 - app.services.streaming_service - INFO - streaming_service.py:165 - Total active connections: 1
+2025-08-07 16:54:40,591 - app.services.streaming_service - WARNING - streaming_service.py:661 - Attempted to send message to non-existent connection: 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:40,594 - app.services.streaming_service - WARNING - streaming_service.py:610 - TTS timeout for connection 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa, sending text-only response
+2025-08-07 16:54:40,596 - app.services.streaming_service - WARNING - streaming_service.py:661 - Attempted to send message to non-existent connection: 1e7cb987-322a-4ad9-9b16-23dcb7d9bcfa
+2025-08-07 16:54:43,858 - app.services.streaming_service - INFO - streaming_service.py:749 - Background silence timeout detected for 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:54:58,227 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 48d88dd4-fa96-4b42-b84c-13009539fe17, triggering transcription
+2025-08-07 16:54:58,227 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.660s of audio for transcription from 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:54:58,228 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:54:59,370 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:54:59,387 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:55:00,651 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:55:01,333 - app.services.tts_service - INFO - tts_service.py:60 - Starting TTS synthesis for 176 characters
+2025-08-07 16:55:11,537 - app.services.tts_service - INFO - tts_service.py:69 - TTS synthesis completed in 10.21 seconds
+2025-08-07 16:55:11,554 - app.services.tts_service - INFO - tts_service.py:76 - Total TTS processing time: 10.22 seconds
+2025-08-07 16:55:19,466 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 48d88dd4-fa96-4b42-b84c-13009539fe17, triggering transcription
+2025-08-07 16:55:19,467 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 2.000s of audio for transcription from 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:55:19,467 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:55:20,950 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:55:20,973 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:55:22,305 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:55:22,522 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 48d88dd4-fa96-4b42-b84c-13009539fe17, triggering transcription
+2025-08-07 16:55:22,524 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.180s of audio for transcription from 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:55:22,524 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:55:24,174 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:55:24,188 - app.services.tts_service - INFO - tts_service.py:60 - Starting TTS synthesis for 61 characters
+2025-08-07 16:55:27,312 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 48d88dd4-fa96-4b42-b84c-13009539fe17, triggering transcription
+2025-08-07 16:55:27,313 - app.services.streaming_service - INFO - streaming_service.py:434 - Processing 0.960s of audio for transcription from 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:55:27,313 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-07 16:55:27,852 - app.services.tts_service - INFO - tts_service.py:69 - TTS synthesis completed in 3.66 seconds
+2025-08-07 16:55:27,863 - app.services.tts_service - INFO - tts_service.py:76 - Total TTS processing time: 3.67 seconds
+2025-08-07 16:55:28,771 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-07 16:55:28,781 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-07 16:55:29,859 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-07 16:55:30,371 - app.services.streaming_service - INFO - streaming_service.py:371 - Silence timeout reached for 48d88dd4-fa96-4b42-b84c-13009539fe17, triggering transcription
+2025-08-07 16:55:30,380 - app.services.tts_service - INFO - tts_service.py:60 - Starting TTS synthesis for 160 characters
+2025-08-07 16:55:36,276 - app.services.streaming_service - INFO - streaming_service.py:222 - WebSocket service restart detected: 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:55:36,277 - app.services.streaming_service - INFO - streaming_service.py:233 - Cleaning up WebSocket connection: 48d88dd4-fa96-4b42-b84c-13009539fe17
+2025-08-07 16:55:36,277 - app.services.streaming_service - INFO - streaming_service.py:252 - Remaining active connections: 0
+2025-08-07 16:55:36,278 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-07 16:55:36,380 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-07 16:55:36,381 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-07 16:55:36,381 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-12 20:13:25,374 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-12 20:13:25,375 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-12 20:13:25,375 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-12 20:13:25,376 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-12 20:13:25,377 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-12 20:14:40,574 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:55746
+2025-08-12 20:14:40,575 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:14:40,576 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:14:40,578 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 8da8c703-e2dc-4fe7-b30c-7f1739c90b85 from 127.0.0.1:55746
+2025-08-12 20:14:40,578 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:14:55,203 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 8da8c703-e2dc-4fe7-b30c-7f1739c90b85
+2025-08-12 20:14:55,203 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 8da8c703-e2dc-4fe7-b30c-7f1739c90b85
+2025-08-12 20:14:55,204 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:14:55,204 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:14:58,319 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:55756
+2025-08-12 20:14:58,320 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:14:58,320 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:14:58,320 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 618f5e06-3e5c-4c86-8708-e90ff3e10a7f from 127.0.0.1:55756
+2025-08-12 20:14:58,320 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:15:09,915 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 618f5e06-3e5c-4c86-8708-e90ff3e10a7f
+2025-08-12 20:15:09,915 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 618f5e06-3e5c-4c86-8708-e90ff3e10a7f
+2025-08-12 20:15:09,915 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:15:09,915 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:15:11,018 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:55760
+2025-08-12 20:15:11,018 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:15:11,019 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:15:11,019 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 72c70d04-0519-4f97-97d1-aa3bc1544d68 from 127.0.0.1:55760
+2025-08-12 20:15:11,019 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:17:16,139 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 72c70d04-0519-4f97-97d1-aa3bc1544d68
+2025-08-12 20:17:16,140 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 72c70d04-0519-4f97-97d1-aa3bc1544d68
+2025-08-12 20:17:16,140 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:17:16,140 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:17:17,219 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:55776
+2025-08-12 20:17:17,219 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:17:17,219 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:17:17,221 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 831a5375-e77e-477e-839d-5867a16b76fa from 127.0.0.1:55776
+2025-08-12 20:17:17,221 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:17:49,772 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 831a5375-e77e-477e-839d-5867a16b76fa
+2025-08-12 20:17:49,772 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 831a5375-e77e-477e-839d-5867a16b76fa
+2025-08-12 20:17:49,772 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:17:49,772 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:17:50,849 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:55789
+2025-08-12 20:17:50,849 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:17:50,850 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:17:50,850 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: ebacd501-6f75-4c1a-a00c-4deb6ddf4345 from 127.0.0.1:55789
+2025-08-12 20:17:50,850 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:18:22,202 - app.services.streaming_service - INFO - streaming_service.py:225 - WebSocket service restart detected: ebacd501-6f75-4c1a-a00c-4deb6ddf4345
+2025-08-12 20:18:22,202 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: ebacd501-6f75-4c1a-a00c-4deb6ddf4345
+2025-08-12 20:18:22,202 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:18:22,203 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:18:22,308 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-12 20:18:22,318 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-12 20:18:22,318 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!
+2025-08-12 20:22:08,654 - app.main - INFO - main.py:105 - Starting AI Assistant API...
+2025-08-12 20:22:08,654 - app.main - INFO - main.py:106 - API Title: AI Assistant API
+2025-08-12 20:22:08,654 - app.main - INFO - main.py:107 - API Version: 1.0.0
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:108 - Debug Mode: False
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:109 - Host: 0.0.0.0
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:110 - Port: 8000
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:113 - ASR Model: whisper-1
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:114 - LLM Model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:22:08,655 - app.main - INFO - main.py:115 - TTS Model: tts_models/en/ljspeech/tacotron2-DDC
+2025-08-12 20:22:08,656 - app.main - INFO - main.py:116 - Janus URL: ws://localhost:8188
+2025-08-12 20:22:08,656 - app.main - INFO - main.py:118 - AI Assistant API started successfully!
+2025-08-12 20:22:40,191 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56004
+2025-08-12 20:22:40,191 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:22:40,191 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:22:40,191 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: b704781a-fef6-4b64-b928-450a98f5f1c6 from 127.0.0.1:56004
+2025-08-12 20:22:40,192 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:23:13,892 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: b704781a-fef6-4b64-b928-450a98f5f1c6
+2025-08-12 20:23:13,893 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: b704781a-fef6-4b64-b928-450a98f5f1c6
+2025-08-12 20:23:13,893 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:23:13,893 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:23:14,991 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56007
+2025-08-12 20:23:14,991 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:23:14,992 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:23:14,992 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 99068e6b-827c-4b3a-90b0-67195c365e66 from 127.0.0.1:56007
+2025-08-12 20:23:14,993 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:23:49,722 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 99068e6b-827c-4b3a-90b0-67195c365e66
+2025-08-12 20:23:49,724 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 99068e6b-827c-4b3a-90b0-67195c365e66
+2025-08-12 20:23:49,724 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:23:49,725 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:23:53,995 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56011
+2025-08-12 20:23:53,996 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:23:53,996 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:23:53,996 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: bc4fe873-352f-4596-a2ed-a4702dbdc0f0 from 127.0.0.1:56011
+2025-08-12 20:23:53,996 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:24:02,392 - app.services.streaming_service - INFO - streaming_service.py:377 - Silence timeout reached for bc4fe873-352f-4596-a2ed-a4702dbdc0f0, triggering transcription
+2025-08-12 20:24:02,393 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 4.160s of audio for transcription from bc4fe873-352f-4596-a2ed-a4702dbdc0f0
+2025-08-12 20:24:02,394 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:24:05,259 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:24:05,264 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for bc4fe873-352f-4596-a2ed-a4702dbdc0f0: 'I'm... I'm... I'm... ' (confidence: None)
+2025-08-12 20:24:05,299 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:24:06,944 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:24:08,116 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 292 to 200 characters
+2025-08-12 20:24:08,122 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:24:08,123 - app.services.tts_service - INFO - tts_service.py:68 - Reduced to first 2 sentences: 186 characters
+2025-08-12 20:24:16,117 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 8.00 seconds
+2025-08-12 20:24:16,125 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 8.01 seconds
+2025-08-12 20:25:08,229 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: bc4fe873-352f-4596-a2ed-a4702dbdc0f0
+2025-08-12 20:25:08,229 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: bc4fe873-352f-4596-a2ed-a4702dbdc0f0
+2025-08-12 20:25:08,229 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:25:08,229 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:25:12,129 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56022
+2025-08-12 20:25:12,129 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:25:12,130 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:25:12,130 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 85e6319e-100a-41bf-9030-39300b46b331 from 127.0.0.1:56022
+2025-08-12 20:25:12,131 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:25:29,524 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 85e6319e-100a-41bf-9030-39300b46b331
+2025-08-12 20:25:29,526 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 85e6319e-100a-41bf-9030-39300b46b331
+2025-08-12 20:25:29,526 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:25:29,526 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:26:33,461 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56033
+2025-08-12 20:26:33,461 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:26:33,461 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:26:33,461 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 824b7c5b-7d30-4774-a3d5-11246f181eff from 127.0.0.1:56033
+2025-08-12 20:26:33,462 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:29:14,614 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 824b7c5b-7d30-4774-a3d5-11246f181eff
+2025-08-12 20:29:14,614 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 824b7c5b-7d30-4774-a3d5-11246f181eff
+2025-08-12 20:29:14,614 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:29:14,614 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:29:15,643 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56089
+2025-08-12 20:29:15,643 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:29:15,644 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:29:15,645 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 5bba95d0-9ae7-4d85-b22a-892b09cc6a05 from 127.0.0.1:56089
+2025-08-12 20:29:15,645 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:29:29,767 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56127
+2025-08-12 20:29:29,767 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:29:29,767 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:29:29,769 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06 from 127.0.0.1:56127
+2025-08-12 20:29:29,769 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 2
+2025-08-12 20:29:36,893 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:29:36,895 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:29:36,896 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:29:40,402 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:29:40,404 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:29:44,035 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:29:44,037 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:29:44,037 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:29:47,289 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:29:47,292 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:29:51,335 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:29:51,336 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.040s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:29:51,337 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:29:54,492 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:29:54,494 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:30:01,535 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:01,535 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:01,537 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:04,379 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:04,381 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'May I have a microphone?' (confidence: None)
+2025-08-12 20:30:04,419 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:30:05,752 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:30:06,674 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 407 to 200 characters
+2025-08-12 20:30:06,677 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:30:09,445 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:09,446 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:09,447 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:12,762 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:12,765 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '. . ' (confidence: None)
+2025-08-12 20:30:15,798 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 9.13 seconds
+2025-08-12 20:30:15,807 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 9.13 seconds
+2025-08-12 20:30:16,664 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:16,665 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:16,666 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:20,570 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:20,572 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:30:23,798 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:23,798 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:23,798 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:26,428 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:26,430 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'Thank you.' (confidence: None)
+2025-08-12 20:30:31,655 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:31,656 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:31,656 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:34,976 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:34,978 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:30:40,125 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:40,125 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:40,125 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:44,039 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:44,041 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'Thank you!' (confidence: None)
+2025-08-12 20:30:44,112 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:30:45,195 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:30:45,835 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 181 characters
+2025-08-12 20:30:45,835 - app.services.tts_service - INFO - tts_service.py:68 - Reduced to first 2 sentences: 163 characters
+2025-08-12 20:30:48,025 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:48,026 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:48,027 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:51,009 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:51,010 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'Yeah. Yeah. Yeah. Yeah. Yeah. ' (confidence: None)
+2025-08-12 20:30:52,728 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 6.90 seconds
+2025-08-12 20:30:52,737 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 6.90 seconds
+2025-08-12 20:30:56,966 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:30:56,967 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:30:56,968 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:30:58,847 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:30:58,848 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '. . ' (confidence: None)
+2025-08-12 20:31:06,057 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:31:06,057 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:06,058 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:31:08,834 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:31:08,835 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:31:17,555 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:31:17,556 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:17,557 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:31:21,695 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:31:21,697 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:31:30,876 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:31:30,876 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:30,877 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:31:32,958 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:31:32,958 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'Can you explain me about moon?' (confidence: None)
+2025-08-12 20:31:32,986 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:31:34,302 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:31:35,167 - app.services.streaming_service - INFO - streaming_service.py:789 - Background silence timeout detected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:35,167 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 1.980s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:35,168 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:31:37,182 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:31:37,183 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:31:46,871 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 3627 to 200 characters
+2025-08-12 20:31:46,875 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:31:48,266 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:31:48,267 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:31:48,267 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:31:51,634 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:31:51,634 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: 'Can you explain me about moon?' (confidence: None)
+2025-08-12 20:31:53,923 - app.services.tts_service - ERROR - tts_service.py:101 - TTS synthesis failed: Calculated padded input size per channel: (4). Kernel size: (5). Kernel size can't be greater than actual input size
+2025-08-12 20:31:58,511 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 5bba95d0-9ae7-4d85-b22a-892b09cc6a05
+2025-08-12 20:31:58,512 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 5bba95d0-9ae7-4d85-b22a-892b09cc6a05
+2025-08-12 20:31:58,512 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 1
+2025-08-12 20:31:58,512 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:32:01,165 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06, triggering transcription
+2025-08-12 20:32:01,166 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:32:01,166 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:32:04,025 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:32:04,026 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06: '' (confidence: None)
+2025-08-12 20:32:20,163 - app.services.streaming_service - INFO - streaming_service.py:227 - WebSocket client going away: 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:32:20,163 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: 7f0e14c6-05cb-4fee-a4db-8cd3a635ae06
+2025-08-12 20:32:20,164 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:32:20,164 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:32:21,371 - app.routers.streaming - INFO - streaming.py:21 - WebSocket connection attempt from: 127.0.0.1:56185
+2025-08-12 20:32:21,371 - app.routers.streaming - INFO - streaming.py:23 - Attempting to accept WebSocket connection...
+2025-08-12 20:32:21,371 - app.routers.streaming - INFO - streaming.py:25 - WebSocket connection accepted successfully
+2025-08-12 20:32:21,372 - app.services.streaming_service - INFO - streaming_service.py:167 - WebSocket connection established: dbc1427f-9f43-4d19-8219-411b485f326c from 127.0.0.1:56185
+2025-08-12 20:32:21,372 - app.services.streaming_service - INFO - streaming_service.py:168 - Total active connections: 1
+2025-08-12 20:32:37,462 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:32:37,463 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.020s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:32:37,464 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:32:40,157 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:32:40,159 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'have a lovely day' (confidence: None)
+2025-08-12 20:32:40,189 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:32:41,277 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:32:41,664 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 93 characters
+2025-08-12 20:32:45,520 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 3.86 seconds
+2025-08-12 20:32:45,530 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 3.87 seconds
+2025-08-12 20:32:53,482 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:32:53,483 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.040s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:32:53,483 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:32:56,553 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:32:56,554 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'Am I audible? Great, so can you give me a plan of...' (confidence: None)
+2025-08-12 20:32:56,592 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:32:58,136 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:32:58,723 - app.services.streaming_service - INFO - streaming_service.py:789 - Background silence timeout detected for dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:32:58,723 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 0.980s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:32:58,724 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:32:58,987 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 234 to 200 characters
+2025-08-12 20:32:58,989 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:32:58,989 - app.services.tts_service - INFO - tts_service.py:68 - Reduced to first 2 sentences: 117 characters
+2025-08-12 20:32:59,874 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:32:59,876 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'steady' (confidence: None)
+2025-08-12 20:33:03,633 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 4.65 seconds
+2025-08-12 20:33:03,647 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 4.66 seconds
+2025-08-12 20:33:22,381 - app.services.streaming_service - INFO - streaming_service.py:377 - Silence timeout reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:33:22,382 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 8.620s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:33:22,382 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:33:27,005 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:33:27,005 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for dbc1427f-9f43-4d19-8219-411b485f326c: '' (confidence: None)
+2025-08-12 20:33:53,163 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:33:53,163 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.040s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:33:53,165 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:33:55,297 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:33:55,299 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'Can you talk?' (confidence: None)
+2025-08-12 20:33:55,319 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:33:56,821 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:33:57,424 - app.services.streaming_service - INFO - streaming_service.py:789 - Background silence timeout detected for dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:33:57,424 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 1.820s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:33:57,425 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:33:58,781 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:33:58,782 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'Can you talk?' (confidence: None)
+2025-08-12 20:33:59,211 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 428 to 200 characters
+2025-08-12 20:33:59,214 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:33:59,214 - app.services.tts_service - INFO - tts_service.py:68 - Reduced to first 2 sentences: 117 characters
+2025-08-12 20:34:04,205 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 4.99 seconds
+2025-08-12 20:34:04,214 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 5.00 seconds
+2025-08-12 20:34:19,242 - app.services.streaming_service - INFO - streaming_service.py:377 - Silence timeout reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:34:19,242 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 7.680s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:19,243 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:34:21,430 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:34:21,432 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'Thank you so much for watching, and I'll see you next time.' (confidence: None)
+2025-08-12 20:34:21,470 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:34:22,649 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:34:23,964 - app.services.streaming_service - INFO - streaming_service.py:789 - Background silence timeout detected for dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:23,964 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 1.020s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:23,965 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:34:24,272 - app.services.tts_service - WARNING - tts_service.py:52 - Truncated TTS text from 267 to 200 characters
+2025-08-12 20:34:24,277 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 203 characters
+2025-08-12 20:34:24,277 - app.services.tts_service - INFO - tts_service.py:68 - Reduced to first 2 sentences: 147 characters
+2025-08-12 20:34:25,155 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:34:25,157 - app.services.streaming_service - INFO - streaming_service.py:525 - Transcription rejected for dbc1427f-9f43-4d19-8219-411b485f326c: 'you' (confidence: None)
+2025-08-12 20:34:30,061 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 5.79 seconds
+2025-08-12 20:34:30,069 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 5.80 seconds
+2025-08-12 20:34:43,652 - app.services.streaming_service - INFO - streaming_service.py:403 - Max buffer duration reached for dbc1427f-9f43-4d19-8219-411b485f326c, triggering transcription
+2025-08-12 20:34:43,653 - app.services.streaming_service - INFO - streaming_service.py:456 - Processing 10.000s of audio for transcription from dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:43,654 - app.services.asr_service - INFO - asr_service.py:41 - Starting transcription with model: whisper-1
+2025-08-12 20:34:45,557 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://api.openai.com/v1/audio/transcriptions "HTTP/1.1 200 OK"
+2025-08-12 20:34:45,558 - app.services.streaming_service - INFO - streaming_service.py:529 - Valid transcription for dbc1427f-9f43-4d19-8219-411b485f326c: 'Thank you.' (confidence: None)
+2025-08-12 20:34:45,574 - app.services.llm_service - INFO - llm_service.py:53 - Generating response with model: meta-llama/llama-3.1-8b-instruct
+2025-08-12 20:34:46,194 - httpx - INFO - _client.py:1729 - HTTP Request: POST https://openrouter.ai/api/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 20:34:47,187 - app.services.tts_service - INFO - tts_service.py:61 - Starting TTS synthesis for 157 characters
+2025-08-12 20:34:52,382 - app.services.tts_service - INFO - tts_service.py:78 - TTS synthesis completed in 5.20 seconds
+2025-08-12 20:34:52,392 - app.services.tts_service - INFO - tts_service.py:85 - Total TTS processing time: 5.21 seconds
+2025-08-12 20:34:55,207 - app.services.streaming_service - INFO - streaming_service.py:225 - WebSocket service restart detected: dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:55,207 - app.services.streaming_service - INFO - streaming_service.py:236 - Cleaning up WebSocket connection: dbc1427f-9f43-4d19-8219-411b485f326c
+2025-08-12 20:34:55,207 - app.services.streaming_service - INFO - streaming_service.py:255 - Remaining active connections: 0
+2025-08-12 20:34:55,209 - app.routers.streaming - INFO - streaming.py:40 - WebSocket connection cleanup completed
+2025-08-12 20:34:55,315 - app.main - INFO - main.py:124 - Shutting down AI Assistant API...
+2025-08-12 20:34:55,316 - app.main - INFO - main.py:130 - Service connections closed successfully
+2025-08-12 20:34:55,316 - app.main - INFO - main.py:134 - AI Assistant API shutdown complete!

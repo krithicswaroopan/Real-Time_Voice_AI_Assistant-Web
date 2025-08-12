@@ -4,6 +4,7 @@
   "description": "Real-time Conversational AI Assistant Frontend",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.0",
@@ -56,9 +57,12 @@
     "typescript": "^5.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "start:clean": "node --no-deprecation node_modules/.bin/react-scripts start",
+    "start:suppress": "node -r ./scripts/suppress-warnings.js node_modules/.bin/react-scripts start",
+    "build": "craco build", 
+    "build:clean": "node --no-deprecation node_modules/.bin/react-scripts build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",

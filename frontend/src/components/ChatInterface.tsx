@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { useAudioManager } from '../hooks/useAudioManager.ts';
 import LiveAudioVisualizer from './LiveAudioVisualizer.tsx';
 import ResponseDisplay from './ResponseDisplay.tsx';
+import AudioDebugPanel from './AudioDebugPanel.tsx';
 
 
 interface VoiceSession {
@@ -24,6 +25,7 @@ const ChatInterface: React.FC = () => {
   const [hasVoiceActivity, setHasVoiceActivity] = useState(false);
   const [isTTSComplete, setIsTTSComplete] = useState(false);
   const [voiceSessions, setVoiceSessions] = useState<VoiceSession[]>([]);
+  const [debugPanelVisible, setDebugPanelVisible] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Track last processed response to prevent duplicates
@@ -37,7 +39,10 @@ const ChatInterface: React.FC = () => {
     isSpeaking,
     currentTranscript,
     currentResponse: audioResponse,
-    error: audioError
+    error: audioError,
+    audioMetrics,
+    pipelineEvents,
+    addPipelineEvent
   } = useAudioManager();
 
   // Auto-scroll to bottom when new sessions arrive
@@ -185,6 +190,14 @@ const ChatInterface: React.FC = () => {
 
         <div ref={messagesEndRef} />
       </Box>
+
+      {/* Debug Panel */}
+      <AudioDebugPanel
+        isVisible={debugPanelVisible}
+        onToggle={setDebugPanelVisible}
+        audioMetrics={audioMetrics}
+        pipelineEvents={pipelineEvents}
+      />
     </Box>
   );
 };

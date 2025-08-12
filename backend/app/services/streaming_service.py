@@ -22,7 +22,9 @@ class StreamingService:
         self.active_connections: Dict[str, Dict[str, Any]] = {}
         self.websocket_connections: Dict[str, websockets.WebSocketServerProtocol] = {}
         self._silence_check_task = None
+        self._keepalive_task = None
         self._start_silence_checker()
+        self._start_keepalive_sender()
     
     async def create_janus_session(self) -> Optional[str]:
         """
@@ -150,11 +152,15 @@ class StreamingService:
             "session_id": None,
             "room_id": None,
             "last_activity": time.time(),
+            "last_keepalive": time.time(),
             "is_active": True,
             "last_speech_time": None,
-            "speech_timeout": 1.5,  # seconds of silence before triggering transcription
-            "min_audio_duration": 0.15,  # minimum audio duration in seconds for API
-            "max_buffer_duration": 10.0  # maximum buffer duration in seconds
+            "speech_timeout": 2.0,  # Increased from 1.5 to 2.0 seconds
+            "min_audio_duration": 0.5,  # Increased from 0.15 to 0.5 seconds  
+            "max_buffer_duration": 10.0,  # maximum buffer duration in seconds
+            "is_processing_transcription": False,  # Prevent simultaneous transcriptions
+            "last_transcription_time": 0,  # Track last transcription to prevent rapid-fire
+            "transcription_cooldown": 3.0  # Minimum seconds between transcriptions
         }
 
         try:
@@ -181,11 +187,16 @@ class StreamingService:
                     
                     # Set a reasonable timeout for receiving messages
                     try:
-                        message = await asyncio.wait_for(websocket.receive_text(), timeout=1.0)
+                        message = await asyncio.wait_for(websocket.receive_text(), timeout=5.0)
                         
                         # Update last activity time
                         self.active_connections[connection_id]["last_activity"] = time.time()
                         
+                        # Handle keepalive pings from client
+                        if message == 'ping':
+                            await websocket.send_text('pong')
+                            continue
+                            
                         # Process the message
                         try:
                             data = json.loads(message)
@@ -332,9 +343,12 @@ class StreamingService:
                         "session_id": None,
                         "room_id": None,
                         "last_speech_time": None,
-                        "speech_timeout": 1.5,
-                        "min_audio_duration": 0.15,
-                        "max_buffer_duration": 10.0
+                        "speech_timeout": 2.0,
+                        "min_audio_duration": 0.5,
+                        "max_buffer_duration": 10.0,
+                        "is_processing_transcription": False,
+                        "last_transcription_time": 0,
+                        "transcription_cooldown": 3.0
                     }
                 
                 # Add audio to buffer and update speech timing
@@ -404,6 +418,22 @@ class StreamingService:
             if not audio_buffer:
                 return
             
+            # Prevent simultaneous transcriptions
+            if connection["is_processing_transcription"]:
+                logger.info(f"Skipping transcription for {connection_id} - already processing")
+                return
+            
+            # Check transcription cooldown
+            current_time = time.time()
+            time_since_last = current_time - connection["last_transcription_time"]
+            if time_since_last < connection["transcription_cooldown"]:
+                logger.info(f"Skipping transcription for {connection_id} - cooldown active ({time_since_last:.1f}s < {connection['transcription_cooldown']}s)")
+                return
+            
+            # Mark as processing
+            connection["is_processing_transcription"] = True
+            connection["last_transcription_time"] = current_time
+            
             # Combine audio chunks
             combined_audio = b"".join(audio_buffer)
             
@@ -413,7 +443,7 @@ class StreamingService:
             duration_seconds = duration_ms / 1000.0
             
             if duration_seconds < connection["min_audio_duration"]:
-                logger.debug(f"Audio too short ({duration_seconds:.3f}s), skipping transcription for {connection_id}")
+                logger.info(f"Audio too short ({duration_seconds:.3f}s < {connection['min_audio_duration']}s), skipping transcription for {connection_id}")
                 # Clear buffer anyway to prevent accumulation of very short clips
                 connection["audio_buffer"] = []
                 connection["last_speech_time"] = None
@@ -425,14 +455,30 @@ class StreamingService:
             
             logger.info(f"Processing {duration_seconds:.3f}s of audio for transcription from {connection_id}")
             
-            # Trigger transcription
-            await self.handle_transcription_request(connection_id, {
-                "language": "en",
-                "prompt": None
-            }, combined_audio)
+            # Send transcription start event to client
+            await self.send_websocket_message(connection_id, {
+                "type": "transcription_start",
+                "success": True,
+                "duration": duration_seconds,
+                "audio_size": len(combined_audio)
+            })
+            
+            # Trigger transcription with error handling
+            try:
+                await self.handle_transcription_request(connection_id, {
+                    "language": "en",
+                    "prompt": None
+                }, combined_audio)
+            finally:
+                # Always reset processing flag
+                if connection_id in self.active_connections:
+                    self.active_connections[connection_id]["is_processing_transcription"] = False
             
         except Exception as e:
             logger.error(f"Error processing buffered audio: {str(e)}")
+            # Reset processing flag on error
+            if connection_id in self.active_connections:
+                self.active_connections[connection_id]["is_processing_transcription"] = False
     
     async def handle_transcription_request(
         self,
@@ -471,6 +517,16 @@ class StreamingService:
             
             # PCM audio data needs WAV conversion
             response = await asr_service.transcribe_audio(request, is_raw_pcm=True)
+            
+            # Validate transcription result
+            is_valid_speech = self._validate_transcription(response.text, response.confidence)
+            
+            if not is_valid_speech:
+                logger.info(f"Transcription rejected for {connection_id}: '{response.text}' (confidence: {response.confidence})")
+                # Don't send transcription response for invalid speech
+                return
+            
+            logger.info(f"Valid transcription for {connection_id}: '{response.text}' (confidence: {response.confidence})")
             
             # Send transcription result back
             await self.send_websocket_message(connection_id, {
@@ -565,12 +621,19 @@ class StreamingService:
                 volume=data.get("volume", 0.0)
             )
             
-            # Add timeout to TTS processing (10 seconds max)
+            # Add timeout to TTS processing (20 seconds max with keepalive)
             try:
+                # Send periodic keepalive during TTS processing
+                tts_task = asyncio.create_task(tts_service.synthesize_speech(request))
+                keepalive_task = asyncio.create_task(self._send_tts_keepalive(connection_id))
+                
                 response = await asyncio.wait_for(
-                    tts_service.synthesize_speech(request),
-                    timeout=10.0
+                    tts_task,
+                    timeout=10.0  # Reduced from 20 to 10 seconds for faster fallback
                 )
+                
+                # Cancel keepalive task when TTS is done
+                keepalive_task.cancel()
                 
                 # Send TTS response back
                 await self.send_websocket_message(connection_id, {
@@ -585,6 +648,8 @@ class StreamingService:
                 
             except asyncio.TimeoutError:
                 logger.warning(f"TTS timeout for connection {connection_id}, sending text-only response")
+                # Cancel keepalive task on timeout
+                keepalive_task.cancel()
                 await self.send_websocket_message(connection_id, {
                     "type": "tts_response",
                     "success": False,
@@ -694,6 +759,15 @@ class StreamingService:
             # No event loop running yet, will be started later
             pass
     
+    def _start_keepalive_sender(self):
+        """Start the background task for sending keepalive pings."""
+        try:
+            loop = asyncio.get_event_loop()
+            self._keepalive_task = loop.create_task(self._keepalive_loop())
+        except RuntimeError:
+            # No event loop running yet, will be started later
+            pass
+    
     async def _silence_check_loop(self):
         """Background loop to check for silence timeouts."""
         while True:
@@ -718,7 +792,89 @@ class StreamingService:
             except Exception as e:
                 logger.error(f"Error in silence check loop: {str(e)}")
                 await asyncio.sleep(1.0)  # Wait longer on error
+    
+    async def _keepalive_loop(self):
+        """Background loop to send keepalive pings to prevent connection timeouts."""
+        while True:
+            try:
+                await asyncio.sleep(15.0)  # Send keepalive every 15 seconds
+                current_time = time.time()
+                
+                # Send keepalive to all active connections
+                connections_to_ping = list(self.websocket_connections.items())
+                for connection_id, websocket in connections_to_ping:
+                    try:
+                        if connection_id in self.active_connections:
+                            last_keepalive = self.active_connections[connection_id].get("last_keepalive", 0)
+                            if current_time - last_keepalive >= 15.0:  # Only ping if needed
+                                await self.send_websocket_message(connection_id, {
+                                    "type": "keepalive",
+                                    "timestamp": current_time,
+                                    "connection_id": connection_id
+                                })
+                                self.active_connections[connection_id]["last_keepalive"] = current_time
+                                logger.debug(f"Sent keepalive to connection {connection_id}")
+                    except Exception as e:
+                        logger.warning(f"Error sending keepalive to {connection_id}: {str(e)}")
+                        # Don't break the loop for individual connection errors
+                        
+            except Exception as e:
+                logger.error(f"Error in keepalive loop: {str(e)}")
+                await asyncio.sleep(5.0)  # Wait longer on error
+    
+    async def _send_tts_keepalive(self, connection_id: str):
+        """Send periodic keepalive messages during long TTS processing."""
+        try:
+            while True:
+                await asyncio.sleep(5.0)  # Send keepalive every 5 seconds during TTS
+                await self.send_websocket_message(connection_id, {
+                    "type": "tts_progress",
+                    "message": "TTS generation in progress...",
+                    "timestamp": time.time()
+                })
+                logger.debug(f"Sent TTS keepalive to {connection_id}")
+        except asyncio.CancelledError:
+            # This is expected when TTS completes
+            logger.debug(f"TTS keepalive cancelled for {connection_id}")
+        except Exception as e:
+            logger.error(f"Error in TTS keepalive for {connection_id}: {str(e)}")
 
+    
+    def _validate_transcription(self, text: str, confidence: Optional[float] = None) -> bool:
+        """Validate if transcription represents real speech."""
+        if not text or not text.strip():
+            return False
+            
+        # Remove common filler words and check if anything meaningful remains
+        meaningful_text = text.strip().lower()
+        
+        # Filter out very short utterances
+        if len(meaningful_text) < 3:
+            return False
+            
+        # Filter out common background noise transcriptions
+        noise_patterns = [
+            "uh", "um", "ah", "eh", "oh", "hm", "hmm", "mm",
+            "you", "thank you", "thanks", "bye", "hello", "hi",
+            "what", "yes", "no", "okay", "ok", "yeah", "yep",
+            "i", "a", "the", "and", "or", "but", "so", "well",
+            "music", "sound", "noise", "background", "static"
+        ]
+        
+        # If the text is only noise patterns, reject it
+        words = meaningful_text.split()
+        if len(words) == 1 and words[0] in noise_patterns:
+            return False
+            
+        # If confidence is very low, reject
+        if confidence is not None and confidence < 0.7:
+            return False
+            
+        # Must have at least some meaningful content
+        if len(words) >= 2 or (len(words) == 1 and len(words[0]) >= 4):
+            return True
+            
+        return False
 
     async def _cleanup_connection(self, connection_id: str):
         """Clean up a specific connection."""

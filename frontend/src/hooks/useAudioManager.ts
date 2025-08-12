@@ -66,6 +66,29 @@ const resampleAudio = (input: Float32Array, inputSampleRate: number, outputSampl
 
 export type AudioState = 'idle' | 'listening' | 'processing' | 'speaking';
 
+export interface AudioMetrics {
+  rms: number;
+  maxAmplitude: number;
+  vadDetected: boolean;
+  audioState: string;
+  connectionId: string | null;
+  bufferSize: number;
+  bufferDuration: number;
+  sampleRate: number;
+  timestamp: number;
+  vadThreshold?: number;
+  baselineNoise?: number;
+  calibrated?: boolean;
+}
+
+export interface PipelineEvent {
+  id: string;
+  type: 'audio_capture' | 'vad_trigger' | 'transcription_start' | 'transcription_end' | 'llm_start' | 'llm_end' | 'tts_start' | 'tts_end' | 'playback_start' | 'playback_end' | 'tts_interruption' | 'playback_interrupted';
+  timestamp: number;
+  data?: any;
+  duration?: number;
+}
+
 interface UseAudioManagerReturn {
   audioState: AudioState;
   isListening: boolean;
@@ -78,6 +101,10 @@ interface UseAudioManagerReturn {
   stopListening: () => void;
   pauseListening: () => void;
   resumeListening: () => void;
+  // Debug data
+  audioMetrics: AudioMetrics | null;
+  pipelineEvents: PipelineEvent[];
+  addPipelineEvent: (type: PipelineEvent['type'], data?: any, duration?: number) => void;
 }
 
 export const useAudioManager = (): UseAudioManagerReturn => {
@@ -86,12 +113,46 @@ export const useAudioManager = (): UseAudioManagerReturn => {
   const [currentResponse, setCurrentResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
   
+  // Debug state
+  const [audioMetrics, setAudioMetrics] = useState<AudioMetrics | null>(null);
+  const [pipelineEvents, setPipelineEvents] = useState<PipelineEvent[]>([]);
+  
   const audioContextRef = useRef<AudioContext | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const websocketRef = useRef<WebSocket | null>(null);
   const connectionIdRef = useRef<string | null>(null);
   const isConnectedRef = useRef<boolean>(false);
   const instanceIdRef = useRef<string>(Math.random().toString(36).substr(2, 9));
+  const lastVadStateRef = useRef<boolean>(false);
+  const vadSessionRef = useRef<{startTime: number | null, speechDuration: number, silenceDuration: number}>(
+    {startTime: null, speechDuration: 0, silenceDuration: 0}
+  );
+  const ttsInterruptionRef = useRef<{
+    enabled: boolean;
+    speechDetectedDuringTTS: boolean;
+    interruptionThreshold: number;
+    consecutiveSpeechFrames: number;
+    requiredFrames: number;
+  }>({
+    enabled: true,
+    speechDetectedDuringTTS: false,
+    interruptionThreshold: 0.003, // Higher threshold during TTS
+    consecutiveSpeechFrames: 0,
+    requiredFrames: 5 // Require 5 consecutive frames to avoid false positives
+  });
+  const vadCalibrationRef = useRef<{
+    baselineNoise: number;
+    adaptiveThreshold: number;
+    noiseHistory: number[];
+    speechHistory: number[];
+    calibrationComplete: boolean;
+  }>({
+    baselineNoise: 0,
+    adaptiveThreshold: 0.001,
+    noiseHistory: [],
+    speechHistory: [],
+    calibrationComplete: false
+  });
   
   // Register this instance on mount
   useEffect(() => {
@@ -112,6 +173,11 @@ export const useAudioManager = (): UseAudioManagerReturn => {
   const lastTranscriptRef = useRef<string>('');
   const lastResponseRef = useRef<string>('');
   const debounceTimeoutRef = useRef<number | null>(null);
+  const keepaliveIntervalRef = useRef<number | null>(null);
+  const lastActivityRef = useRef<number>(Date.now());
+  const reconnectTimeoutRef = useRef<number | null>(null);
+  const reconnectAttemptsRef = useRef<number>(0);
+  const maxReconnectAttempts = 5;
   
   const SAMPLE_RATE = 16000;
 
@@ -119,6 +185,55 @@ export const useAudioManager = (): UseAudioManagerReturn => {
   const isListening = audioState === 'listening';
   const isProcessing = audioState === 'processing';
   const isSpeaking = audioState === 'speaking';
+  
+  // Pipeline event tracking
+  const addPipelineEvent = useCallback((type: PipelineEvent['type'], data?: any, duration?: number) => {
+    const event: PipelineEvent = {
+      id: Math.random().toString(36).substr(2, 9),
+      type,
+      timestamp: Date.now(),
+      data,
+      duration
+    };
+    
+    setPipelineEvents(prev => {
+      const newEvents = [...prev, event];
+      // Keep only last 50 events to prevent memory buildup
+      if (newEvents.length > 50) {
+        return newEvents.slice(-50);
+      }
+      return newEvents;
+    });
+    
+    console.log(`Pipeline Event: ${type}`, data);
+  }, []);
+  
+  // Update audio metrics
+  const updateAudioMetrics = useCallback((
+    rms: number, 
+    maxAmplitude: number, 
+    vadDetected: boolean,
+    bufferSize: number = 0,
+    bufferDuration: number = 0,
+    vadThreshold?: number,
+    baselineNoise?: number,
+    calibrated?: boolean
+  ) => {
+    setAudioMetrics({
+      rms,
+      maxAmplitude,
+      vadDetected,
+      audioState,
+      connectionId: connectionIdRef.current,
+      bufferSize,
+      bufferDuration,
+      sampleRate: audioContextRef.current?.sampleRate || 48000,
+      timestamp: Date.now(),
+      vadThreshold,
+      baselineNoise,
+      calibrated
+    });
+  }, [audioState]);
 
   const setAudioStateWithLog = useCallback((newState: AudioState) => {
     console.log(`Audio state transition: ${audioState} → ${newState}`);
@@ -159,11 +274,14 @@ export const useAudioManager = (): UseAudioManagerReturn => {
       
       audio.onended = () => {
         console.log('TTS playback finished, resuming listening');
+        addPipelineEvent('playback_end');
         URL.revokeObjectURL(audioUrl);
         audioPlayerRef.current = null;
         
-        // Reset processing sequence
+        // Reset processing sequence and TTS interruption state
         isProcessingSequenceRef.current = false;
+        ttsInterruptionRef.current.speechDetectedDuringTTS = false;
+        ttsInterruptionRef.current.consecutiveSpeechFrames = 0;
         
         // Resume listening after TTS finishes (if not manually paused)
         if (!isPausedRef.current) {
@@ -176,8 +294,10 @@ export const useAudioManager = (): UseAudioManagerReturn => {
         URL.revokeObjectURL(audioUrl);
         audioPlayerRef.current = null;
         
-        // Reset processing sequence
+        // Reset processing sequence and TTS interruption state
         isProcessingSequenceRef.current = false;
+        ttsInterruptionRef.current.speechDetectedDuringTTS = false;
+        ttsInterruptionRef.current.consecutiveSpeechFrames = 0;
         
         // Resume listening on error (if not manually paused)
         if (!isPausedRef.current) {
@@ -265,7 +385,27 @@ export const useAudioManager = (): UseAudioManagerReturn => {
             console.log(`Instance ${instanceIdRef.current}: Connection established with ID:`, data.connection_id);
             connectionIdRef.current = data.connection_id;
             globalAudioManager.connectionId = data.connection_id;
+            
+            // Start client-side keepalive
+            startKeepalive();
           } 
+          else if (data.type === 'keepalive') {
+            console.log(`Instance ${instanceIdRef.current}: Received keepalive ping`);
+            lastActivityRef.current = Date.now();
+            // No need to respond - server keepalive is one-way
+          }
+          else if (data.type === 'tts_progress') {
+            console.log(`Instance ${instanceIdRef.current}: TTS progress:`, data.message);
+            // Update activity to prevent timeout
+            lastActivityRef.current = Date.now();
+          } 
+          else if (data.type === 'transcription_start') {
+            console.log(`Instance ${instanceIdRef.current}: Transcription started`);
+            addPipelineEvent('transcription_start', {
+              duration: data.duration,
+              audioSize: data.audio_size
+            });
+          }
           else if (data.type === 'transcription_response') {
             if (data.success && data.text && data.text !== lastTranscriptRef.current) {
               // Prevent processing duplicate transcriptions
@@ -275,12 +415,20 @@ export const useAudioManager = (): UseAudioManagerReturn => {
               }
               
               console.log('Transcription received:', data.text);
+              addPipelineEvent('transcription_end', { 
+                text: data.text, 
+                confidence: data.confidence 
+              });
+              
               lastTranscriptRef.current = data.text;
               setCurrentTranscript(data.text);
               setAudioStateWithLog('processing');
               
               // Mark sequence as processing
               isProcessingSequenceRef.current = true;
+              
+              // Add LLM start event
+              addPipelineEvent('llm_start', { message: data.text });
               
               // Send chat request immediately after transcription
               if (ws.readyState === WebSocket.OPEN) {
@@ -299,8 +447,17 @@ export const useAudioManager = (): UseAudioManagerReturn => {
           else if (data.type === 'chat_response') {
             if (data.success && data.message && data.message !== lastResponseRef.current) {
               console.log('Chat response received:', data.message);
+              addPipelineEvent('llm_end', { 
+                message: data.message, 
+                model: data.model_used,
+                tokens: data.tokens_used 
+              });
+              
               lastResponseRef.current = data.message;
               setCurrentResponse(data.message);
+              
+              // Add TTS start event
+              addPipelineEvent('tts_start', { text: data.message });
               
               // Request TTS for the response
               if (ws.readyState === WebSocket.OPEN) {
@@ -324,11 +481,18 @@ export const useAudioManager = (): UseAudioManagerReturn => {
           else if (data.type === 'tts_response') {
             if (data.success && data.audio_data) {
               console.log(`Instance ${instanceIdRef.current}: TTS audio received, starting playback`);
+              addPipelineEvent('tts_end', { 
+                duration: data.duration_ms,
+                voice: data.voice_used,
+                audioSize: data.audio_data.length 
+              });
+              addPipelineEvent('playback_start');
               setAudioStateWithLog('speaking');
               playTTSAudio(data.audio_data);
             } else if (data.timeout) {
               // TTS timed out, show text response and resume listening
               console.warn(`Instance ${instanceIdRef.current}: TTS timed out, showing text response`);
+              addPipelineEvent('tts_end', { error: 'timeout' });
               if (data.fallback_text) {
                 setCurrentResponse(data.fallback_text);
               }
@@ -339,6 +503,7 @@ export const useAudioManager = (): UseAudioManagerReturn => {
             } else {
               // TTS failed, resume listening
               console.error(`Instance ${instanceIdRef.current}: TTS failed:`, data.error);
+              addPipelineEvent('tts_end', { error: data.error });
               isProcessingSequenceRef.current = false;
               if (!isPausedRef.current) {
                 setAudioStateDebounced('listening');
@@ -377,12 +542,26 @@ export const useAudioManager = (): UseAudioManagerReturn => {
           globalAudioManager.connectionId = null;
         }
         
-        if (event.code === 1012) {
+        // Stop keepalive on disconnect
+        stopKeepalive();
+        
+        // Handle different disconnect reasons
+        if (event.code === 1000) {
+          // Normal closure - don't reconnect
+          console.log(`Instance ${instanceIdRef.current}: Normal WebSocket closure`);
+        } else if (event.code === 1011) {
+          // Server error (keepalive timeout) - attempt reconnection
+          console.log(`Instance ${instanceIdRef.current}: Server keepalive timeout - attempting reconnection`);
+          attemptReconnection();
+        } else if (event.code === 1012) {
           setError('Service restarting...');
+          attemptReconnection();
         } else if (event.code === 1006) {
-          setError('Connection failed - check if backend is running');
-        } else if (event.code !== 1000) {
-          setError('Connection lost');
+          setError('Connection failed - attempting reconnection...');
+          attemptReconnection();
+        } else {
+          setError('Connection lost - attempting reconnection...');
+          attemptReconnection();
         }
       };
       
@@ -509,11 +688,183 @@ export const useAudioManager = (): UseAudioManagerReturn => {
           if (!isPausedRef.current && websocketRef.current?.readyState === WebSocket.OPEN) {
             const inputData = event.inputBuffer.getChannelData(0);
             
-            // Debug: Check if we're getting any audio input
+            // Calculate audio metrics
             const rms = Math.sqrt(inputData.reduce((sum, sample) => sum + sample * sample, 0) / inputData.length);
             const maxAmplitude = Math.max(...inputData.map(Math.abs));
             
-            console.log(`Instance ${instanceIdRef.current}: Audio Input - RMS: ${rms.toFixed(4)}, Max: ${maxAmplitude.toFixed(4)}, Length: ${inputData.length}`);
+            // Adaptive VAD with noise calibration
+            const vadCalibration = vadCalibrationRef.current;
+            
+            // Update noise baseline during silence periods
+            if (!lastVadStateRef.current) {
+              vadCalibration.noiseHistory.push(maxAmplitude);
+              if (vadCalibration.noiseHistory.length > 50) {
+                vadCalibration.noiseHistory = vadCalibration.noiseHistory.slice(-50);
+                // Calculate baseline as 75th percentile of noise
+                const sortedNoise = [...vadCalibration.noiseHistory].sort((a, b) => a - b);
+                vadCalibration.baselineNoise = sortedNoise[Math.floor(sortedNoise.length * 0.75)];
+              }
+            }
+            
+            // Update speech levels during speech periods
+            if (lastVadStateRef.current) {
+              vadCalibration.speechHistory.push(maxAmplitude);
+              if (vadCalibration.speechHistory.length > 20) {
+                vadCalibration.speechHistory = vadCalibration.speechHistory.slice(-20);
+              }
+            }
+            
+            // Calculate adaptive threshold with much higher sensitivity requirements
+            if (vadCalibration.noiseHistory.length > 10) {
+              const noiseFloor = vadCalibration.baselineNoise;
+              // Use much higher multiplier for stricter VAD - require 10x to 20x above noise floor
+              const dynamicMultiplier = Math.max(10.0, Math.min(20.0, 15.0 + (noiseFloor * 2000)));
+              vadCalibration.adaptiveThreshold = Math.max(0.005, noiseFloor * dynamicMultiplier); // Higher minimum threshold
+              vadCalibration.calibrationComplete = true;
+              
+              console.log(`VAD Calibration: noise=${noiseFloor.toFixed(6)}, threshold=${vadCalibration.adaptiveThreshold.toFixed(6)}, multiplier=${dynamicMultiplier.toFixed(1)}`);
+            }
+            
+            // Use different thresholds based on audio state
+            let vadThreshold = vadCalibration.adaptiveThreshold;
+            
+            // Additional validation: require both amplitude AND RMS to be significant
+            const amplitudeCheck = maxAmplitude > vadThreshold;
+            const rmsCheck = rms > (vadThreshold * 0.3); // RMS should also be elevated
+            const consistencyCheck = maxAmplitude > (rms * 2); // Amplitude should be reasonably higher than RMS
+            
+            // Only detect speech if ALL conditions are met
+            let vadDetected = amplitudeCheck && rmsCheck && consistencyCheck;
+            
+            // Log detailed VAD analysis for debugging
+            if (Date.now() % 2000 < 50) { // Every ~2 seconds
+              console.log(`VAD Analysis: amp=${maxAmplitude.toFixed(6)} (>${vadThreshold.toFixed(6)}=${amplitudeCheck}), rms=${rms.toFixed(6)} (>${(vadThreshold*0.3).toFixed(6)}=${rmsCheck}), consistency=${consistencyCheck}, final=${vadDetected}`);
+            }
+            
+            // TTS Interruption Detection
+            const ttsInterruption = ttsInterruptionRef.current;
+            if (audioState === 'speaking' && ttsInterruption.enabled) {
+              // Use higher threshold during TTS to avoid false interruptions
+              const ttsThreshold = Math.max(vadThreshold, ttsInterruption.interruptionThreshold);
+              const speechDuringTTS = maxAmplitude > ttsThreshold;
+              
+              if (speechDuringTTS) {
+                ttsInterruption.consecutiveSpeechFrames++;
+                if (ttsInterruption.consecutiveSpeechFrames >= ttsInterruption.requiredFrames) {
+                  if (!ttsInterruption.speechDetectedDuringTTS) {
+                    console.log('🛑 TTS INTERRUPTION DETECTED - User speaking during TTS');
+                    addPipelineEvent('tts_interruption', {
+                      threshold: ttsThreshold,
+                      amplitude: maxAmplitude,
+                      consecutiveFrames: ttsInterruption.consecutiveSpeechFrames
+                    });
+                    
+                    // Stop TTS playback immediately
+                    if (audioPlayerRef.current) {
+                      audioPlayerRef.current.pause();
+                      audioPlayerRef.current = null;
+                      addPipelineEvent('playback_interrupted');
+                    }
+                    
+                    // Reset processing sequence and return to listening
+                    isProcessingSequenceRef.current = false;
+                    setAudioStateWithLog('listening');
+                    
+                    ttsInterruption.speechDetectedDuringTTS = true;
+                  }
+                }
+              } else {
+                ttsInterruption.consecutiveSpeechFrames = 0;
+              }
+              
+              // Override VAD detection during TTS to show interruption status
+              vadDetected = speechDuringTTS;
+            } else {
+              // Reset TTS interruption state when not speaking
+              ttsInterruption.speechDetectedDuringTTS = false;
+              ttsInterruption.consecutiveSpeechFrames = 0;
+            }
+            
+            // Add calibration info to metrics
+            const calibrationInfo = {
+              threshold: vadThreshold,
+              baselineNoise: vadCalibration.baselineNoise,
+              calibrated: vadCalibration.calibrationComplete,
+              noiseFloor: vadCalibration.baselineNoise
+            };
+            
+            // Update real-time metrics with calibration info
+            updateAudioMetrics(
+              rms, 
+              maxAmplitude, 
+              vadDetected, 
+              inputData.length * 2, 
+              (inputData.length / audioContext.sampleRate) * 1000,
+              vadThreshold,
+              vadCalibration.baselineNoise,
+              vadCalibration.calibrationComplete
+            );
+            
+            // Log calibration status periodically
+            if (Date.now() % 5000 < 50) { // Every ~5 seconds
+              console.log(`VAD Calibration Status:`, {
+                threshold: vadThreshold.toFixed(6),
+                baselineNoise: vadCalibration.baselineNoise.toFixed(6),
+                calibrated: vadCalibration.calibrationComplete,
+                noiseHistorySize: vadCalibration.noiseHistory.length,
+                speechHistorySize: vadCalibration.speechHistory.length
+              });
+            }
+            
+            // Only log audio capture events for actual speech detection
+            if (vadDetected) {
+              addPipelineEvent('audio_capture', { 
+                rms: rms.toFixed(6), 
+                maxAmplitude: maxAmplitude.toFixed(6), 
+                vadDetected,
+                threshold: vadThreshold.toFixed(6),
+                amplitudeCheck,
+                rmsCheck,
+                consistencyCheck
+              });
+              
+              // Add VAD trigger event for first speech detection
+              if (!lastVadStateRef.current) {
+                console.log('🎤 REAL SPEECH DETECTED - Starting audio capture');
+                addPipelineEvent('vad_trigger', { 
+                  threshold: vadThreshold,
+                  confidence: maxAmplitude / vadThreshold
+                });
+              }
+            }
+            
+            // Track VAD sessions and patterns
+            const currentTime = Date.now();
+            
+            if (vadDetected && !lastVadStateRef.current) {
+              // Speech started
+              vadSessionRef.current.startTime = currentTime;
+              addPipelineEvent('vad_trigger', { 
+                threshold: vadThreshold,
+                rms,
+                maxAmplitude,
+                transitionType: 'silence_to_speech'
+              });
+            } else if (!vadDetected && lastVadStateRef.current && vadSessionRef.current.startTime) {
+              // Speech ended
+              const speechDuration = currentTime - vadSessionRef.current.startTime;
+              vadSessionRef.current.speechDuration = speechDuration;
+              addPipelineEvent('vad_trigger', { 
+                threshold: vadThreshold,
+                speechDuration,
+                transitionType: 'speech_to_silence'
+              });
+            }
+            
+            // Track VAD state changes
+            lastVadStateRef.current = vadDetected;
+            
+            console.log(`Instance ${instanceIdRef.current}: Audio Input - RMS: ${rms.toFixed(4)}, Max: ${maxAmplitude.toFixed(4)}, VAD: ${vadDetected ? 'SPEECH' : 'SILENCE'}, Length: ${inputData.length}`);
             
             // Check for completely silent audio
             if (maxAmplitude < 0.0001) {
@@ -585,6 +936,29 @@ export const useAudioManager = (): UseAudioManagerReturn => {
     }
   }, [initializeWebSocket, setAudioStateWithLog]);
   
+  const startKeepalive = useCallback(() => {
+    // Clear any existing keepalive
+    if (keepaliveIntervalRef.current) {
+      clearInterval(keepaliveIntervalRef.current);
+    }
+    
+    // Send ping every 30 seconds
+    keepaliveIntervalRef.current = window.setInterval(() => {
+      if (websocketRef.current?.readyState === WebSocket.OPEN) {
+        console.log(`Instance ${instanceIdRef.current}: Sending client keepalive ping`);
+        websocketRef.current.send('ping');
+        lastActivityRef.current = Date.now();
+      }
+    }, 30000);
+  }, []);
+  
+  const stopKeepalive = useCallback(() => {
+    if (keepaliveIntervalRef.current) {
+      clearInterval(keepaliveIntervalRef.current);
+      keepaliveIntervalRef.current = null;
+    }
+  }, []);
+  
   const stopListening = useCallback(() => {
     isPausedRef.current = true;
     
@@ -596,6 +970,9 @@ export const useAudioManager = (): UseAudioManagerReturn => {
       clearTimeout(debounceTimeoutRef.current);
       debounceTimeoutRef.current = null;
     }
+    
+    // Stop keepalive
+    stopKeepalive();
     
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -696,6 +1073,37 @@ export const useAudioManager = (): UseAudioManagerReturn => {
     initializeApp();
   }, []);
   
+  const attemptReconnection = useCallback(() => {
+    if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
+      setError(`Connection failed after ${maxReconnectAttempts} attempts. Please refresh the page.`);
+      return;
+    }
+    
+    // Clear any existing reconnection timeout
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+    
+    const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 30000); // Exponential backoff, max 30s
+    reconnectAttemptsRef.current++;
+    
+    console.log(`Instance ${instanceIdRef.current}: Attempting reconnection ${reconnectAttemptsRef.current}/${maxReconnectAttempts} in ${delay}ms`);
+    setError(`Reconnecting... (${reconnectAttemptsRef.current}/${maxReconnectAttempts})`);
+    
+    reconnectTimeoutRef.current = window.setTimeout(async () => {
+      try {
+        await initializeWebSocket();
+        // Reset reconnect attempts on successful connection
+        reconnectAttemptsRef.current = 0;
+        setError(null);
+        console.log(`Instance ${instanceIdRef.current}: Reconnection successful`);
+      } catch (error) {
+        console.error(`Instance ${instanceIdRef.current}: Reconnection failed:`, error);
+        attemptReconnection(); // Try again
+      }
+    }, delay);
+  }, [initializeWebSocket]);
+  
   // Cleanup when component unmounts
   useEffect(() => {
     return () => {
@@ -716,6 +1124,9 @@ export const useAudioManager = (): UseAudioManagerReturn => {
     startListening,
     stopListening,
     pauseListening,
-    resumeListening
+    resumeListening,
+    audioMetrics,
+    pipelineEvents,
+    addPipelineEvent
   };
 };
